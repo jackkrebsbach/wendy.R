@@ -1,0 +1,36 @@
+---
+Title: Wendy Exploration MLE
+author: Jack Krebsbach
+format:
+ typst:
+    toc: true
+    section-numbering: 1.1.a
+---
+
+# Wendy
+
+## Test functions
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+# Test function: This is centered at 0
+def phi(t, r=2, c=0):
+    return np.exp(
+        -9 / np.maximum((1 - ((t - c) / r) ** 2), 1e-10)
+    )  # We use 1e-10 instead of 0, otherwise we divide by 0
+
+
+t = np.arange(-1, 1, 0.01)
+
+plt.clf()
+plt.plot(t, phi(t, r=1))
+```
+
+What about a different centering?
+```{python}
+t = np.arange(-1, 3, 0.01)
+plt.plot(t, phi(t, r=3, c=1))
+```
