@@ -38,7 +38,7 @@ $ udot = bold(f)(bold(p), bold(u)(t),t) $<strongform>
 
 where $ bold(u)(t) in cal(H)^1((0,T), RR^D),  space bold(f)(bold(p), bold(u)(t), t) = vec(f_(1)(bold(p), bold(u)(t), t), f_2(bold(p), bold(u)(t), t), dots.v, f_(D)(bold(p), bold(u)(t), t))  in RR^D space #footnote[$cal(H)$ is a Sobelev Space] $
 
-Note that $bold(u)(t)$ is a function of the state variable at time $t in [0,T]$. The system maybe be Nonlinear in Parameters (NiP).
+Note that $bold(u)(t)$ is the function state variable at time $t in [0,T]$. The system maybe be Nonlinear in Parameters (NiP).
 
  There are a finite number of parameters $bold(p) in RR^J$ which parameterize $bold(f)$. Bold lowercase letters represent vectors while bold uppercase letters represent matrices.
 
@@ -183,3 +183,14 @@ where $phi_(k)(t)$ is centered about $t_k$ with compact support  $phi_k in cal(C
 
 
 #text(fill: red)[ What are the forms of allowed for test functions? We want them to be smooth, but what about symmetric? Otherwise does the convolution analogy still work?]
+
+#pagebreak()
+= Test Function Minimum Radius Selection
+
+In practice the error from numerical integration can dominate the noise if the radius of the test function is too small. Hence, we must optimize to find a minimum radius $underline(m)_t$ which all test functions must adhere to. To do this we can expand the integral of the residual into it's Fourier Basis. 
+
+
+
+
+
+
