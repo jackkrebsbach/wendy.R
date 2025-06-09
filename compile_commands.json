@@ -1,0 +1,8 @@
+[
+  {
+    "directory": "/ml/wendy",
+    "command": "clang++ -std=c++17 -Wall -Wextra -O2 -I/opt/homebrew/include -L/opt/homebrew/lib -lsymengine pkg/src/index.cpp -o build/program",
+    "file": "pkg/src/index.cpp"
+  }
+]
+
