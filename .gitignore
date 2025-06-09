@@ -2,3 +2,4 @@
 /.venv
 /.quarto/
 *.DS_Store 
+/build/**/*/
