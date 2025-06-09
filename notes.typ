@@ -28,7 +28,7 @@
 
 #set text(font: "New Computer Modern", size: 12pt)
 
-= Strong Form
+= Strong Form <strongformsection>
 
 Given observed data, we wish to estimate the parameters of a $D$-dimensional system of ordinary differential equations (ODE). This system is assumed to have the form
 
@@ -36,47 +36,37 @@ Given observed data, we wish to estimate the parameters of a $D$-dimensional sys
 $ udot = bold(f)(bold(p), bold(u)(t),t) $<strongform>
 
 
-where $bold(u)(t) in cal(H)^1((0,T), RR^D)$ ($cal(H)$ is a Sobelev space) is a function of the state variable at time $t in [0,T]$. The system maybe be Nonlinear in Parameters (NiP).
+where $ bold(u)(t) in cal(H)^1((0,T), RR^D),  space bold(f)(bold(p), bold(u)(t), t) = vec(f_(1)(bold(p), bold(u)(t), t), f_2(bold(p), bold(u)(t), t), dots.v, f_(D)(bold(p), bold(u)(t), t))  in RR^D space #footnote[$cal(H)$ is a Sobelev Space] $
+
+Note that $bold(u)(t)$ is a function of the state variable at time $t in [0,T]$. The system maybe be Nonlinear in Parameters (NiP).
 
  There are a finite number of parameters $bold(p) in RR^J$ which parameterize $bold(f)$. Bold lowercase letters represent vectors while bold uppercase letters represent matrices.
 
 
+
+
 #pagebreak()
-= Weak Form 
+= Weak Form  <weakformsection>
 
-To convert from the strong form, @strongform, to the weak from, we first multiply the right and left sides of the equality with a test function $phi_(k)(t)$, and then integrating over the domain for each dimension of the vector valued functions $udot$ and $bold(f)$, i.e,   
-
-
-$ integral_0^T phi_(k)(t)udot dif t = integral_0^T phi_(k)(t)bold(f) dif t $<weakform>
+To convert from the strong form, @strongform, to the weak from, we first multiply the right and left sides of the equality element wise  with a test function $bold(phi)_(k)(t) = bold(1)_D  phi_(k)(t)$ where $phi_(k)(t) in cal(C)_C^(infinity)((0,T), RR)$ and then integrate over the domain $udot$ and $bold(f)$, i.e,   
 
 
+$ integral_0^T bold(phi)_(k)(t) dot.circle udot dif t = integral_0^T bold(phi)_(k)(t) dot.circle bold(f) dif t #footnote[ $dot.circle$ is the Hadamard product (element wise multiplication of two vectors)] $<weakform> 
 
-Notice that that this system is in terms of the derivatives $bold(accent(u,dot))$, which are unkown.  By using integration by parts of the lefthand side (LHS) the strong form, @strongform, becomes  
+
+Using integration by parts of the lefthand side (LHS) the strong form, @strongform, becomes  
 
 
-$ -integral_0^T accent(phi,dot)_(k)(t)bold(u) dif t = integral_0^T phi_(k)(t)bold(f) dif t $<weakform2>
+$ underbrace(cancel(bold(phi)(t) dot.circle bold(u)(t) ), bold(0)) space stretch(|,size: #150%)_(0)^(T)  -integral_0^T accent(bold(phi),dot)_(k)(t) dot.circle  bold(u)(t) dif t = integral_0^T bold(phi)_(k)(t) dot.circle bold(f) dif t $<weakform2>
 
-where  the derivative is transfered to the test function. Note that this formulation requires equality for each dimension of the system. That is the product $accent(phi,dot)_(k)(t)bold(u)$ is
-
-$
-accent(phi,dot)_(k)(t)bold(u)  = [accent(phi,dot)_(k)(t)u_(1)(t),space accent(phi,dot)_(k)(t) u_(2)(t),space dots space,space accent(phi,dot)_(k)(t)u_(D)(t) ]^T in RR^D  
-$
-
-and 
-
-$
-
-phi_(k)(t)bold(f)  = [phi_(k)(t)f_(1)(bold(p), bold(u)(t), t),space phi_(k)(t) f_(2)(bold(p), bold(u)(t), t),space dots space,space phi_(k)(t)f_(D)(bold(p), bold(u)(t), t) ]^T in RR^D  
-. $
-
-Thus, for a given test function $phi_(k)(t)$, the weak form of @strongform is:
+where  the derivative is transfered to the test function. Now the data (state) match the form of the equality. Thus, for a given test function $bold(phi)(k)(t)$, the weak form of @strongform is:
 
 
 $ -integral_0^T vec(
   accent(phi,dot)_(k)(t) u_1(t),
   accent(phi,dot)_(k)(t) u_2(t),
   dots.v,
-  accent(phi,dot)_(k)(t) u_D(t)
+  accent(phi,dot)_(k)(t) u_(D)(t)
 ) dif t =  integral_0^T vec(
   phi_(k)(t) f_1(bold(p), bold(u)(t), t),
   phi_(k)(t) f_2(bold(p), bold(u)(t), t),
@@ -85,16 +75,18 @@ $ -integral_0^T vec(
 ) dif t $ 
 
 
-Where equality holds for each dimension of the system. Formally, in order for $bold(u)(t)$ to be a solution to the weak form of the ODE, it must hold for all possible test functions. In practice, we consider a finite number of test functions.
+Where equality holds for each dimension of the system. Formally, in order for $bold(u)(t)$ to be a solution to the weak form of the ODE, it must hold for all possible test functions. In practice, we consider a finite number of test functions. See @interpretationsection for further interpretation.
 
 #pagebreak()
-= Discretization
+= Discretization <discretizationsection>
 
 
-We assume that there are $M$ observed state data, which are equispaced along the domain $(0,T)$ and is of the form
+We assume that there are $M$ observed state data composed of the true and noise.They are equispaced along the domain $(0,T)$ and take the form
 
 $ bold(u)_m = bold(u)(t_m) + bold(epsilon)_m space forall m in {0, dots ,M}  $
 
+
+where $bold(epsilon)_m attach(~, t:"i.i.d") bold(cal(N))(bold(0), bold(Sigma)).$
 
 To satisfy @weakform2 for the set of $K$ test functions we build the following matrices:
 
@@ -146,10 +138,10 @@ $ -accent(bold(Phi), dot)bold(U) &=
   accent(phi,dot)_(K)(t_0), accent(phi,dot)_(K)(t_1), dots, accent(phi,dot)_(K)(t_M) 
 )
 mat(
-u_1(t_0), u_2(t_0), dots,u_(D)(t_0) ;
-u_1(t_1), u_2(t_1), dots,u_(D)(t_1) ;
+u_01, u_02, dots, u_(0 D);
+u_11, u_12, dots,u_(1 D) ;
   dots.v, , dots.down;
-u_1(t_M), u_2(t_M), dots,u_(D)(t_M) 
+u_(M 1), u_(2 M), dots,u_(M D) 
 ) 
 \
 
@@ -170,24 +162,24 @@ $
 
 For a given test function $phi_(k)(t)$, the approximation for one dimension of @weakform2 for the LHS and RHS are
 
- $ op("LHS:     ")  &  -integral_0^T accent(phi,dot)_(k)(t)u_(D)(t) dif t &&approx  -sum_(i=0)^M phi_(k)(t_i)u_(D)(t_i) \
+ $ op("LHS:     ")  &  -integral_0^T accent(phi,dot)_(k)(t)u_(D)(t) dif t &&approx  -sum_(i=0)^M phi_(k)(t_i)u_(i D) \
  op("RHS:     ") &
  integral_0^T phi_(k)(t) f_(D)(bold(p),bold(u)(t),t) dif t &&approx  sum_(i=0)^M phi_(k)(t_i)f_(D)(bold(p),bold(u)_i,t_i) $
 
 
-
 #pagebreak()
-=  Interpretation of Weak Formulation
+=  Interpretation of Weak Formulation <interpretationsection>
 
 Inspecting the form of test functions: $ phi_(k)(t) = C exp(-9/([1 - ((t - t_k)/(m_t Delta t))^2 ]_+)) $ 
 
 we see that instead of using a subscript $phi_(k)(t)$ we can define
-$phi(t) = C exp(-9/([1 - (t/(m_t Delta t))^2 ]_+))$ and taking advantage of symmetry 
+$phi(t) = C exp(-9/([1 - (t/(m_t Delta t))^2 ]_+))$ and with symmetry 
 
-$ phi_(k)(t) = phi(t-t_k)  attach(=, t:"symmetry")   phi(t_k - t) $  and @weakform becomes
+$ phi_(k)(t) = phi(t-t_k)  attach(=, t:"symmetry")   phi(t_k - t) $  @weakform becomes
 
-$ (phi * udot)(t_k) = integral_0^T phi(t_k -t)udot(t) dif t &= integral_0^T phi(t_k-t)bold(f)(bold(p), bold(u)(t), t) dif t  = (phi * bold(f))(t_k) $
+$ (bold(phi) * udot)(t_k) = integral_0^T bold(phi)(t_k -t) dot.circle  udot(t) dif t &= integral_0^T bold(phi)(t_k-t) dot.circle bold(f)(bold(p), bold(u)(t), t) dif t  = (bold(phi) * bold(f))(t_k) $
 
-Note that $phi_(k)(t)$ is centered about $t_k$ with compact support  $phi_k in cal(C)^infinity_(C)((0,T),RR)$, $C$ is chosen such that $norm(phi_k)_2 =1,$ and $[dot]_+ := max(dot,0)$. So the @weakform is equivalent to convolving the system with a test function $phi(t)$.
+where $phi_(k)(t)$ is centered about $t_k$ with compact support  $phi_k in cal(C)^infinity_(C)((0,T),RR)$, $C$ is chosen such that $norm(phi_k)_2 =1,$ and $[dot]_+ := max(dot,0)$. Hence @weakform is equivalent to convolving the system with a test function $bold(phi)_(k)(t)$ and evaluating at $t_k$.
+
 
 #text(fill: red)[ What are the forms of allowed for test functions? We want them to be smooth, but what about symmetric? Otherwise does the convolution analogy still work?]
