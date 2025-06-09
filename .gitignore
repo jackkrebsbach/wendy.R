@@ -3,3 +3,4 @@
 /.quarto/
 *.DS_Store 
 *.o
+pkg/core/main
