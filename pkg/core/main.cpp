@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main() {
-  double result = phi2(3, 3);
+  double result = phi(1, 2, 3);
   std::cout << result;
   return (0);
 }

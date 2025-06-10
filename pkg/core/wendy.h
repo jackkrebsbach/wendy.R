@@ -9,11 +9,13 @@ using namespace Rcpp;
 
 class Wendy {
 public:
-  std::vector<SymEngine::LambdaRealDoubleVisitor> sym_system;
   int D;
   int J;
   double min_radius;
-  Wendy(CharacterVector du, NumericMatrix U, NumericVector params);
+  std::vector<SymEngine::Expression> sym_system;
+  std::vector<std::vector<SymEngine::Expression>> sym_system_jac;
+
+  Wendy(CharacterVector f, NumericMatrix U, NumericVector params);
 };
 
 #endif

@@ -8,14 +8,15 @@
 using namespace Rcpp;
 using namespace SymEngine;
 
-std::vector<LambdaRealDoubleVisitor> create_symbolic_system(CharacterVector du,
-                                                            int D, int J);
+std::vector<Expression> create_symbolic_system(CharacterVector f, int D, int J);
 
 std::vector<Expression> create_symbolic_vars(const std::string &base_name,
                                              int count);
 
-vec_basic build_input_symbols(const std::vector<Expression> &u,
-                              const std::vector<Expression> &p,
-                              const Expression &t);
+std::vector<SymEngine::Expression> create_symbolic_inputs(int J, int D);
+
+std::vector<std::vector<Expression>>
+compute_jacobian(const std::vector<Expression> &system,
+                 const std::vector<Expression> &inputs);
 
 #endif
