@@ -129,23 +129,35 @@ goodwin_2d <- function(du, u, p, t) {
   du[1] <- p[1] - p[3] / (36 + p[2] * u2)
   du[2] <- p[4] * u1 - p[5]
 
-  return(du)
+  return()
 }
 ```
 
-Look at using Rcpp code to pass in functions
+Look at using Rcpp code to pass in functions. This may be good as the cpp will not call the R function. 
 
 ```{r}
 library(Rcpp)
+library(symengine)
+
+Sys.setenv("PKG_CPPFLAGS" = "-I/opt/homebrew/include")
+Sys.setenv("PKG_LIBS" = "-L/opt/homebrew/lib -lsymengine -lflint -lgmp -lmpfr")
+
 Rcpp::sourceCpp('./exploration.cpp')
 
-test <- makeSymbolicSystem(U, goodwin_2d, p)
-test
-```
+goodwin_2d_sym <- function(u, p, t) {
+  u1 <- u[[1]]
+  u2 <- u[[2]]
+  dx1 <- p[[1]] - p[[3]] / (36 + p[[2]] * u2) # 36 is just a number
+  dx2 <- p[[4]] * u1 - p[[5]]
+  list(dx1, dx2)
+}
 
+x <- lapply(1:2, function(i) S(paste0("x", i)))
+p <- lapply(1:5, function(i) S(paste0("p", i)))
+t <- S("t")
 
-Finding out it is very hard to pass in an R function so we will build the function in in SymEngine.R
+dx <- goodwin_2d_sym(x, p, t)
+dx_chr <- vapply(dx, as.character, character(1))
 
-```{r}
-
+c_version <- process_symbolic_dx(dx_chr)
 ```
