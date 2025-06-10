@@ -152,7 +152,7 @@ goodwin_2d_sym <- function(u, p, t) {
   list(dx1, dx2)
 }
 
-x <- lapply(1:2, function(i) S(paste0("x", i)))
+x <- lapply(1:2, function(i) S(paste0("u", i)))
 p <- lapply(1:5, function(i) S(paste0("p", i)))
 t <- S("t")
 

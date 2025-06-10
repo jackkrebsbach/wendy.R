@@ -20,9 +20,9 @@ vec_basic build_input_symbols(const std::vector<Expression> &u,
                               const Expression &t) {
   vec_basic inputs;
   for (const auto &e : u)
-    inputs.push_back(e.get_basic()); // u1, u2
+    inputs.push_back(e.get_basic());
   for (const auto &e : p)
-    inputs.push_back(e.get_basic()); // p1 ... p5
+    inputs.push_back(e.get_basic());
   inputs.push_back(t.get_basic());
   return inputs;
 }
@@ -36,7 +36,7 @@ NumericVector process_symbolic_dx(CharacterVector dx_chr, NumericMatrix U,
 
   // Symbolic Expressions
   auto u = create_symbolic_vars("u", D);
-  auto p = create_symbolic_vars("p", J); // Parameters
+  auto p = create_symbolic_vars("p", J);
   auto t = Expression(symbol("t"));
   std::vector<Expression> dx(dx_chr.size());
 
@@ -53,12 +53,19 @@ NumericVector process_symbolic_dx(CharacterVector dx_chr, NumericMatrix U,
                       p_hat.end()); // p1 ... p5
   input_values.push_back(t_eval);   // t
 
+  vec_basic inputs = build_input_symbols(u, p, t);
+
   for (int i = 0; i < dx_chr.size(); ++i) {
     auto expr = dx[i];
     SymEngine::LambdaRealDoubleVisitor visitor;
-    vec_basic inputs = build_input_symbols(u, p, t);
-    visitor.init(inputs, *expr.get_basic());
+    Rcpp::Rcout << "Expression " << i << ": " << dx[i] << "\n";
+    Rcpp::Rcout << "Input symbols: ";
+    for (const auto &sym : inputs) {
+      Rcpp::Rcout << *sym << " ";
+    }
+    Rcpp::Rcout << "\n";
 
+    visitor.init(inputs, *expr.get_basic());
     visitors[i] = visitor.call(input_values);
   }
 
