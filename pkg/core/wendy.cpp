@@ -12,9 +12,10 @@ Wendy::Wendy(Rcpp::CharacterVector du, NumericMatrix U, NumericVector params) {
   // Symbolic representation of the D dimensional system f
   sym_system = create_symbolic_system(du, D, J);
 
-  // All inputs including parameters p1,... and the state variables u1,... and t
-  std::vector<SymEngine::Expression> sym_inputs = create_symbolic_inputs(J, D);
+  // We want the Jacobian with respect to the input parameters p1, ...
+  std::vector<SymEngine::Expression> sym_param_vars =
+      create_symbolic_vars("p", J);
 
   // Symbolic representation of the jacobian of the system f
-  sym_system_jac = compute_jacobian(sym_system, sym_inputs);
+  sym_system_jac = compute_jacobian(sym_system, sym_param_vars);
 }
