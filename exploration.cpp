@@ -28,9 +28,9 @@ vec_basic build_input_symbols(const std::vector<Expression> &u,
 }
 
 // [[Rcpp::export]]
-NumericVector process_symbolic_dx(CharacterVector dx_chr, NumericMatrix U,
-                                  NumericVector u_eval, double t_eval,
-                                  NumericVector p_hat) {
+NumericVector symbolicSystemEval(CharacterVector du, NumericMatrix U,
+                                 NumericVector u_eval, double t_eval,
+                                 NumericVector p_hat) {
   int const J = p_hat.length(); // J Number of parameters
   int const D = U.cols();       // D Dimension of the system
 
@@ -38,10 +38,11 @@ NumericVector process_symbolic_dx(CharacterVector dx_chr, NumericMatrix U,
   auto u = create_symbolic_vars("u", D);
   auto p = create_symbolic_vars("p", J);
   auto t = Expression(symbol("t"));
-  std::vector<Expression> dx(dx_chr.size());
 
-  for (int i = 0; i < dx_chr.size(); ++i) {
-    dx[i] = SymEngine::parse(Rcpp::as<std::string>(dx_chr[i]));
+  std::vector<Expression> dx(du.size());
+
+  for (int i = 0; i < du.size(); ++i) {
+    dx[i] = SymEngine::parse(Rcpp::as<std::string>(du[i]));
   }
 
   std::vector<double> visitors(dx.size());
@@ -55,19 +56,35 @@ NumericVector process_symbolic_dx(CharacterVector dx_chr, NumericMatrix U,
 
   vec_basic inputs = build_input_symbols(u, p, t);
 
-  for (int i = 0; i < dx_chr.size(); ++i) {
+  for (int i = 0; i < du.size(); ++i) {
     auto expr = dx[i];
     SymEngine::LambdaRealDoubleVisitor visitor;
-    Rcpp::Rcout << "Expression " << i << ": " << dx[i] << "\n";
-    Rcpp::Rcout << "Input symbols: ";
-    for (const auto &sym : inputs) {
-      Rcpp::Rcout << *sym << " ";
-    }
-    Rcpp::Rcout << "\n";
+    // For debugging
+    //  Rcpp::Rcout << "Expression " << i << ": " << dx[i] << "\n";
+    //  Rcpp::Rcout << "Input symbols: ";
+    //  for (const auto &sym : inputs) {
+    //    Rcpp::Rcout << *sym << " ";
+    //  }
+    // Rcpp::Rcout << "\n";
 
     visitor.init(inputs, *expr.get_basic());
     visitors[i] = visitor.call(input_values);
   }
 
   return Rcpp::wrap(visitors);
+}
+
+Rcpp::CharacterVector symbolic_derivative(Rcpp::CharacterVector exprs_chr) {
+  using namespace SymEngine;
+  Rcpp::CharacterVector results(exprs_chr.size());
+  RCP<const SymEngine::Symbol> p = symbol("p"); // Differentiate w.r.t. p
+
+  for (int i = 0; i < exprs_chr.size(); ++i) {
+    RCP<const Basic> expr = parse(Rcpp::as<std::string>(exprs_chr[i]));
+    RCP<const Basic> dexpr = expr->diff(p);
+    std::ostringstream oss;
+    oss << *dexpr;
+    results[i] = oss.str();
+  }
+  return results;
 }

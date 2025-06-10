@@ -144,24 +144,22 @@ Sys.setenv("PKG_LIBS" = "-L/opt/homebrew/lib -lsymengine -lflint -lgmp -lmpfr")
 
 Rcpp::sourceCpp('./exploration.cpp')
 
-goodwin_2d_sym <- function(u, p, t) {
-  u1 <- u[[1]]
-  u2 <- u[[2]]
-  dx1 <- p[[1]] - p[[3]] / (36 + p[[2]] * u2) # 36 is just a number
-  dx2 <- p[[4]] * u1 - p[[5]]
-  list(dx1, dx2)
+f <- function(u, p, t) {
+  du1 <- p[[1]] - p[[3]] / (36 + p[[2]] * u[[2]])
+  du2 <- p[[4]] * u[[1]] - p[[5]]
+  list(du1, du2)
 }
 
-x <- lapply(1:2, function(i) S(paste0("u", i)))
+u <- lapply(1:2, function(i) S(paste0("u", i)))
 p <- lapply(1:5, function(i) S(paste0("p", i)))
 t <- S("t")
 
-dx <- goodwin_2d_sym(x, p, t) |>
+du <- f(u, p, t) |>
   vapply(as.character, character(1))
 
+# This takes in a symbolic version of the system, builds it in cpp, and evaluates it given , u ,t and the parameters
 
-p_vect <- as.numeric(py$p_star)
-
-c_version <- process_symbolic_dx(dx, U, c(1, 2), 1.0, p_vect)
-c_version
+result <- symbolicSystemEval(du, U, c(1, 2), 1.0, as.numeric(py$p_star))
+result
+print(f(c(1, 2), as.numeric(py$p_star), 1))
 ```

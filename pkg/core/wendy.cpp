@@ -1,9 +1,10 @@
 #include "wendy.h"
+#include "symbolic_utils.h"
+#include <Rcpp.h>
+#include <symengine/expression.h>
 
-using SymEngine::Expression;
-
-Expression Wendy::makeSymbolicExpression() {
-  Expression x("x");
-  auto ex = pow(x + sqrt(Expression(3)), 6);
-  return ex;
+Wendy::Wendy(Rcpp::CharacterVector du, NumericMatrix U, NumericVector params) {
+  J = params.length();
+  D = U.cols();
+  sym_system = create_symbolic_system(du, D, J);
 }
