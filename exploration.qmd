@@ -156,8 +156,12 @@ x <- lapply(1:2, function(i) S(paste0("x", i)))
 p <- lapply(1:5, function(i) S(paste0("p", i)))
 t <- S("t")
 
-dx <- goodwin_2d_sym(x, p, t)
-dx_chr <- vapply(dx, as.character, character(1))
+dx <- goodwin_2d_sym(x, p, t) |>
+  vapply(as.character, character(1))
 
-c_version <- process_symbolic_dx(dx_chr)
+
+p_vect <- as.numeric(py$p_star)
+
+c_version <- process_symbolic_dx(dx, U, c(1, 2), 1.0, p_vect)
+c_version
 ```
