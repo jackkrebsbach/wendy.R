@@ -1,4 +1,4 @@
-#include "core.h"
+#include "wendy.h"
 #include <symengine/expression.h>
 
 using SymEngine::Expression;

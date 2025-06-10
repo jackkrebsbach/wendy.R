@@ -1,7 +1,7 @@
 [
   {
     "directory": "/ml/wendy",
-    "command": "clang++ -std=c++17 -Wall -Wextra -O2 -I/opt/homebrew/include",
-    "file": "pkg/core/core.cpp"
+     "command": "clang++ -std=c++17 -Wall -Wextra -O2 -I/opt/homebrew/include -I/opt/homebrew/lib/R/4.5/site-library/Rcpp/include -L/opt/homebrew/lib -lsymengine pkg/core/wendy.cpp",
+    "file": "pkg/core/wendy.cpp"
   }
 ]

@@ -104,3 +104,4 @@ plt.plot(t, u1, marker="o", linestyle="None", markerfacecolor="none", label="u1"
 plt.plot(t, u2, marker="o", linestyle="None", markerfacecolor="none", label="u2")
 plt.legend()
 ```
+

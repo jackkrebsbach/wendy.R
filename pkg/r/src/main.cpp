@@ -1,4 +1,4 @@
-#include "./core/core.h"
+#include "core/wendy.h"
 #include <Rcpp.h>
 #include <symengine/expression.h>
 

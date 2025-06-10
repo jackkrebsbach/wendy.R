@@ -1,9 +1,9 @@
 Package: WENDyMLE
 Type: Package
-Title: Concise Summary of What the Package Does
+Title: Weak Form Estimation of Nonlinear Dynamics
 Version: 1.0
 Date: 2025-06-09
-Authors@R: person("Your", "Name", role = c("aut", "cre"), email = "your@email.com")
+Authors@R: person("Jack", "Krebsbach", role = c("aut", "cre"), email = "jack.krebsbach@colorado.edu")
 Description: More about what it does (maybe more than one line).
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.14)
