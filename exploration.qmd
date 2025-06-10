@@ -9,6 +9,11 @@ format:
 
 # Wendy
 
+Load libraries
+
+```{r}
+library(reticulate)
+```
 
 
 ## Test functions
@@ -105,3 +110,35 @@ plt.plot(t, u2, marker="o", linestyle="None", markerfacecolor="none", label="u2"
 plt.legend()
 ```
 
+
+Now lets look at the system in R and see how we can build a symbolic representation in SymEngine
+
+
+```{r}
+p <- c(72, 1, 2, 1, 1)
+
+U <- matrix(c(py$u1, py$u2), ncol = 2)
+
+goodwin_2d <- function(du, u, p, t) {
+  #   ""
+  #     u1' = p1 - p3/(36 + p2*u2)
+  #     u2' = p4*u1 - p5
+  #   ""
+  u1 <- u[1]
+  u2 <- u[2]
+  du[1] <- p[1] - p[3] / (36 + p[2] * u2)
+  du[2] <- p[4] * u1 - p[5]
+
+  return(None)
+}
+```
+
+Look at using Rcpp code to pass in functions
+
+```{r}
+library(Rcpp)
+Rcpp::sourceCpp('./exploration.cpp')
+
+test <- makeSymbolicSystem(U, goodwin_2d, p)
+test
+```

@@ -1,4 +1,14 @@
-#pragma once
+#ifndef WENDY_H
+#define WENDY_H
+
 #include <symengine/expression.h>
 
-SymEngine::Expression makeSymbolicExpression();
+class Wendy {
+public:
+  int system;
+  int time_steps;
+
+  SymEngine::Expression makeSymbolicExpression();
+};
+
+#endif
