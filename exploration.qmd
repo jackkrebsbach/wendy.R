@@ -139,6 +139,6 @@ Look at using Rcpp code to pass in functions
 library(Rcpp)
 Rcpp::sourceCpp('./exploration.cpp')
 
-test <- makeSymbolicSystem(U, goodwin_2d, p)
+test <- makeSymbolicSystem(U, p)
 test
 ```
