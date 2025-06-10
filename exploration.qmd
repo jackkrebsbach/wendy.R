@@ -129,7 +129,7 @@ goodwin_2d <- function(du, u, p, t) {
   du[1] <- p[1] - p[3] / (36 + p[2] * u2)
   du[2] <- p[4] * u1 - p[5]
 
-  return(None)
+  return(du)
 }
 ```
 
@@ -139,6 +139,13 @@ Look at using Rcpp code to pass in functions
 library(Rcpp)
 Rcpp::sourceCpp('./exploration.cpp')
 
-test <- makeSymbolicSystem(U, p)
+test <- makeSymbolicSystem(U, goodwin_2d, p)
 test
+```
+
+
+Finding out it is very hard to pass in an R function so we will build the function in in SymEngine.R
+
+```{r}
+
 ```
