@@ -1,6 +1,6 @@
 CXX = clang++
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -fPIC -I/opt/homebrew/include
-LDFLAGS = -L/opt/homebrew/lib
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -fPIC -I/opt/homebrew/include 
+LDFLAGS = -L/opt/homebrew/lib 
 LIBS = -lsymengine -lflint -lgmp -lmpfr
 
 TARGET = main

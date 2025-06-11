@@ -36,13 +36,13 @@ std::vector<SymEngine::Expression> create_all_symbolic_inputs(int D, int J) {
   return input_symbols;
 }
 
-std::vector<Expression> create_symbolic_system(CharacterVector f) {
-
-  std::vector<Expression> dx(f.size());
-  for (int i = 0; i < f.size(); ++i) {
-    dx[i] = SymEngine::parse(Rcpp::as<std::string>(f[i]));
+std::vector<SymEngine::Expression>
+create_symbolic_system(const std::vector<std::string> &f) {
+  std::vector<SymEngine::Expression> dx;
+  dx.reserve(f.size());
+  for (const auto &s : f) {
+    dx.push_back(SymEngine::parse(s));
   }
-
   return dx;
 }
 

@@ -4,12 +4,17 @@
 #include <symengine/expression.h>
 
 // Constructor
-Wendy::Wendy(Rcpp::CharacterVector f, NumericMatrix U, NumericVector p0) {
+Wendy::Wendy(Rcpp::CharacterVector f_vec, NumericMatrix U, NumericVector p0) {
 
   J = p0.length(); // Number of parameters p1, ...
   D = U.cols();    // Dimension of the system
 
   // Symbolic representation of the D dimensional system f
+  // first need to convert to a standard vector string
+  std::vector<std::string> f(f_vec.size());
+  for (int i = 0; i < f_vec.size(); ++i) {
+    f_vec[i] = Rcpp::as<std::string>(f_vec[i]);
+  }
   sym_system = create_symbolic_system(f);
 
   // Symbolic representation of the jacobian of the system f and hessian w.r.t
