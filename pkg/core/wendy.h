@@ -47,6 +47,12 @@ public:
    * @param p0 Numeric vector of initial parameter guess (p0)
    */
   Wendy(CharacterVector f, NumericMatrix U, NumericVector p0);
+
+  /**
+   *
+   * @brief Logs all public member details to std::cout
+   */
+  void log_details() const;
 };
 
 #endif // WENDY_H

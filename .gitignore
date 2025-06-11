@@ -4,4 +4,6 @@
 *.DS_Store 
 *.o
 pkg/core/main
-pkg/test/[^.]*
+pkg/test/*
+!pkg/test/*.*
+!pkg/test/Makefile
