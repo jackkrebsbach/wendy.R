@@ -19,4 +19,7 @@ std::vector<std::vector<Expression>>
 compute_jacobian(const std::vector<Expression> &system,
                  const std::vector<Expression> &inputs);
 
+std::vector<std::vector<std::vector<Expression>>>
+compute_jacobian(const std::vector<std::vector<Expression>> &matrix,
+                 const std::vector<Expression> &inputs);
 #endif

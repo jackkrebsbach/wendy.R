@@ -70,7 +70,7 @@ build_symbolic_system(const std::vector<Expression> &dx, int D, int J) {
 
   return visitors;
 }
-
+// For vector input
 std::vector<std::vector<Expression>>
 compute_jacobian(const std::vector<Expression> &system,
                  const std::vector<Expression> &inputs) {
@@ -80,6 +80,26 @@ compute_jacobian(const std::vector<Expression> &system,
   for (size_t i = 0; i < system.size(); ++i) {
     for (size_t j = 0; j < inputs.size(); ++j) {
       jacobian[i][j] = system[i].diff(inputs[j]);
+    }
+  }
+  return jacobian;
+}
+
+// For matrix input
+std::vector<std::vector<std::vector<Expression>>>
+compute_jacobian(const std::vector<std::vector<Expression>> &matrix,
+                 const std::vector<Expression> &inputs) {
+  size_t rows = matrix.size();
+  size_t cols = rows > 0 ? matrix[0].size() : 0;
+  std::vector<std::vector<std::vector<Expression>>> jacobian(
+      rows, std::vector<std::vector<Expression>>(
+                cols, std::vector<Expression>(inputs.size())));
+
+  for (size_t i = 0; i < rows; ++i) {
+    for (size_t j = 0; j < cols; ++j) {
+      for (size_t k = 0; k < inputs.size(); ++k) {
+        jacobian[i][j][k] = matrix[i][j].diff(inputs[k]);
+      }
     }
   }
   return jacobian;
