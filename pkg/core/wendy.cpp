@@ -10,7 +10,7 @@ Wendy::Wendy(Rcpp::CharacterVector f, NumericMatrix U, NumericVector p0) {
   D = U.cols();    // Dimension of the system
 
   // Symbolic representation of the D dimensional system f
-  sym_system = create_symbolic_system(f, D, J);
+  sym_system = create_symbolic_system(f);
 
   // Symbolic representation of the jacobian of the system f
   // We want the Jacobian with respect to the input parameters p1, ...

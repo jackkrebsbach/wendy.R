@@ -36,11 +36,7 @@ std::vector<SymEngine::Expression> create_all_symbolic_inputs(int D, int J) {
   return input_symbols;
 }
 
-std::vector<Expression> create_symbolic_system(CharacterVector f, int D,
-                                               int J) {
-  auto u = create_symbolic_vars("u", D);
-  auto p = create_symbolic_vars("p", J);
-  auto t = Expression(symbol("t"));
+std::vector<Expression> create_symbolic_system(CharacterVector f) {
 
   std::vector<Expression> dx(f.size());
   for (int i = 0; i < f.size(); ++i) {

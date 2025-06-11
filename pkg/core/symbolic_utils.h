@@ -8,7 +8,7 @@
 using namespace Rcpp;
 using namespace SymEngine;
 
-std::vector<Expression> create_symbolic_system(CharacterVector f, int D, int J);
+std::vector<Expression> create_symbolic_system(CharacterVector f);
 
 std::vector<Expression> create_symbolic_vars(const std::string &base_name,
                                              int count);
