@@ -1,5 +1,4 @@
 #include "symbolic_utils.h"
-#include "Rcpp/vector/instantiation.h"
 #include <Rcpp.h>
 #include <symengine/expression.h>
 #include <symengine/lambda_double.h>
