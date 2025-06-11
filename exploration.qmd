@@ -113,30 +113,10 @@ plt.plot(t, u2, marker="o", linestyle="None", markerfacecolor="none", label="u2"
 plt.legend()
 ```
 
-
-Now lets look at the system in R and see how we can build a symbolic representation in SymEngine
-
-
-```{r}
-p <- c(72, 1, 2, 1, 1)
-
-U <- matrix(c(py$u1, py$u2), ncol = 2)
-
-goodwin_2d <- function(du, u, p, t) {
-  #   ""
-  #     u1' = p1 - p3/(36 + p2*u2)
-  #     u2' = p4*u1 - p5
-  #   ""
-  u1 <- u[1]
-  u2 <- u[2]
-  du[1] <- p[1] - p[3] / (36 + p[2] * u2)
-  du[2] <- p[4] * u1 - p[5]
-
-  return()
-}
-```
-
 ## WENDy Module Development
+
+Now lets look at the system in R and see how we can build a symbolic representation in SymEngine.
+
 
 I explored trying to pass an R function and building it symbolically in cpp, but could not get around it. So looks like we will have to use symengine as a dependency to build the system symbolically in R and then passing it to rcpp.
 
@@ -151,7 +131,9 @@ f <- function(u, p, t) {
 }
 
 p_hat <- as.numeric(py$p_star)
+U <- matrix(c(py$u1, py$u2), ncol = 2)
 
+# Create symbols of system (parameters, state variables, and time )
 u <- lapply(1:ncol(U), function(i) S(paste0("u", i)))
 p <- lapply(1:length(p_hat), function(i) S(paste0("p", i)))
 t <- S("t")
