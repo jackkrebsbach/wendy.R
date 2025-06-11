@@ -6,6 +6,7 @@ Date: 2025-06-09
 Authors@R: person("Jack", "Krebsbach", role = c("aut", "cre"), email = "jack.krebsbach@colorado.edu")
 Description: More about what it does (maybe more than one line).
 License: GPL (>= 2)
-Imports: Rcpp (>= 1.0.14)
-LinkingTo: Rcpp
+Imports: Rcpp (>= 1.0.14), symengine
+LinkingTo: Rcpp, symengine
+SystemRequirements: SymEngine C++ library
 RoxygenNote: 7.3.2

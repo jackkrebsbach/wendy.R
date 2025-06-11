@@ -10,19 +10,11 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// getSymbolicExpression
-Rcpp::String getSymbolicExpression();
-RcppExport SEXP _WENDyMLE_getSymbolicExpression() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(getSymbolicExpression());
-    return rcpp_result_gen;
-END_RCPP
-}
+
+RcppExport SEXP _rcpp_module_boot_WENDy();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_WENDyMLE_getSymbolicExpression", (DL_FUNC) &_WENDyMLE_getSymbolicExpression, 0},
+    {"_rcpp_module_boot_WENDy", (DL_FUNC) &_rcpp_module_boot_WENDy, 0},
     {NULL, NULL, 0}
 };
 
