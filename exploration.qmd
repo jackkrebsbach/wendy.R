@@ -170,6 +170,10 @@ Rcpp::sourceCpp('./pkg-dev.cpp')
 loadModule('WENDy')
 
 w <- new(WENDy, du, U, p_hat)
+
 #Expose functions and methods
+J <- w$J # Number of parameters
+D <- w$D # Dimension of system
+
 w$log_details()
 ```
