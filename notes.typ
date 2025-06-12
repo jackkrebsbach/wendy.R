@@ -195,8 +195,6 @@ In practice the error from numerical integration can dominate the noise if the r
 = Distribution of the Weak Residual
 
 
-
-
 == Proposition 1
 
 
@@ -225,5 +223,4 @@ The true data satisfy the weak form of the differential equation  for all possib
 == Lemma 1
 
 == Remark 1
-
 
