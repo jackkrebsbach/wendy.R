@@ -15,7 +15,7 @@
 #let udot = {$accent(bold(u),dot)$}
 
 #show: ams-article.with(
-  title: [WENDy for Nonlinear ODE],
+  title: [WENDy for  ODE],
   authors: (
     (
       name: "Jack Krebsbach",
@@ -191,6 +191,39 @@ In practice the error from numerical integration can dominate the noise if the r
 
 
 
+#pagebreak()
+= Distribution of the Weak Residual
 
+
+
+
+== Proposition 1
+
+
+_Let uncorrupted data $bold(U)^*$ and true parameters $p^*$ satisfy $angle.l bold(phi), udot  angle.r = angle.l bold(phi), bold(f) angle.r$ on the time domain $[0,T]$. Assuming $bold(f)$ is continuous in time the following holds. _
+
+$ lim_(M -> infinity) ||bold(r)^text("int")|| = 0 $
+
+where $bold(r)^text("int") = bold(r)(bold(p^star), bold(U)^star, bold(t)).$
+
+
+#proof[ 
+The true data satisfy the weak form of the differential equation  for all possible test functions. 
+
+#text(red)[What is the kth entry of r int?, a number or a vector?]
+
+]
+
+
+#linebreak()
+#linebreak()
+#linebreak()
+== Proposition 2
+
+
+
+== Lemma 1
+
+== Remark 1
 
 
