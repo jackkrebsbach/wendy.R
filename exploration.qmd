@@ -158,4 +158,5 @@ J <- w$J # Number of parameters
 D <- w$D # Dimension of system
 
 w$log_details()
+
 ```

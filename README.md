@@ -18,3 +18,10 @@ The core code of WENDy is implemented in c++ and wrapped by Rcpp. If and when a 
 - [ ] Build the weak log-likelihood of the residual, the gradient, and hessian w.r.t parameters using symbolic information
 - [ ] Define all inputs needed to solve the main problem (estimate $ p^\star $)
 - [ ] Find trust region solver c++ library to use
+- [ ] Bundle symengine c++ library with Wendy instead of using a system level dependency.
+
+
+
+## Future
+
+- [ ] Build the G matrix efficiently when the RHS is Linear in Parameters.
