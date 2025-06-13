@@ -1,0 +1,13 @@
+PKG_CPPFLAGS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::CxxFlags()") \
+               -I/opt/homebrew/include
+
+PKG_LIBS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()") \
+           -L/opt/homebrew/lib \
+           -lsymengine -lflint -lgmp -lmpfr
+
+SOURCES = main.cpp RcppExports.cpp $(wildcard core/*.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
+
+all: $(SHLIB)
+
+$(SHLIB): $(OBJECTS)
