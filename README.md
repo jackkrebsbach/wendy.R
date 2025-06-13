@@ -25,3 +25,5 @@ The core code of WENDy is implemented in c++ and wrapped by Rcpp. If and when a 
 ## Future
 
 - [ ] Build the G matrix efficiently when the RHS is Linear in Parameters.
+- [ ] Lognormal noise
+- [ ] Implement other solvers
