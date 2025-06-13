@@ -1,0 +1,102 @@
+---
+Title: Test Functions and Matrices 
+author: Jack Krebsbach
+format:
+ typst:
+    toc: true
+    section-numbering: 1.1.a
+---
+
+# Wendy
+
+Load libraries
+
+```{r}
+library(reticulate)
+```
+
+
+## Test functions
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import quad
+from scipy.integrate import solve_ivp
+from functools import reduce
+
+
+# Test function: This is centered at 0
+def phi(t, r=2, c=0):
+    return np.exp(
+        -9 / np.maximum((1 - ((t - c) / r) ** 2), 1e-10)
+    )  # We use 1e-10 instead of 0, otherwise we divide by 0
+
+
+t = np.arange(-1, 1, 0.01)
+
+plt.clf()
+plt.plot(t, phi(t, r=1))
+```
+
+What about a different centering?
+```{python}
+t = np.arange(-1, 3, 0.01)
+plt.plot(t, phi(t, r=3, c=1))
+```
+
+We see that the test functions appear to be gaussion like, with different radius and centers. On the domain (0,T) we can always map to (-1,1) and back. So what we really care about is building evaluations on (-1,1). Let's explore on for the domain (0,10) with different delta ts and how that relates to building the test function $V^\text{full}$.
+
+```{python}
+# In practice this is what we will use
+def phi(t, eta=9):
+    return np.exp(-eta * (1 - t**2) ** (-1))
+
+
+# Gap of 1 (the test functions don't overlap at all) maximum amount of test functions
+# The test functions are compactly supported so they are zero at tt[0] and tt[mp1].
+
+dt = 0.05
+tt = np.arange(0, 10, dt)  # 50 points
+
+
+def build_chunks(n_diamter, n_test_functions):
+    # Build chunks
+    chunks = [
+        list(range(j * n_diameter, (j + 1) * n_diameter))
+        for j in range(n_test_functions)
+    ]
+
+    # Need to fill in the gap later if len % diamter != 0
+    if len_tt % n_diameter != 0:
+        last_chunk_end = chunks[-1][-1]
+        chunks.append([range(last_chunk_end, len_tt)])
+    return chunks
+
+
+def buildVk(n_radius, tt):
+    n_diameter = 2 * n_radius + 1
+    len_tt = len(tt)
+    mp1 = len(tt) - 1  # last index
+    n_test_functions = len_tt // n_diameter
+
+    chunks = build_chunks(n_diameter, n_test_functions)
+
+    V = np.zeros((len(chunks), len_tt))
+
+    xx = np.linspace(-1, 1, n_diameter)
+    v_rowk = phi(xx)
+
+    for i, support_indices in enumerate(chunks):
+        print(len(support_indices))
+        V[i, support_indices] = v_rowk[: len(support_indices)]
+    return V
+
+
+radii = np.arange(10, 16, 1)
+
+V_full = np.vstack([buildVk(int(i), tt) for i in radii])
+print(V_full.shape)
+print(n_test_functions)
+print(n_test_functions * len(radii))
+```
