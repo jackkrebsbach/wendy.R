@@ -16,10 +16,10 @@ The core code of WENDy is implemented in c++ and wrapped by Rcpp. If and when a 
 - [x] Create symbolic representations of the right hand side of  ODE system 
 - [ ] Create function to solve for the min radius needed for test functions
 - [ ] Build the weak log-likelihood of the residual, the gradient, and hessian w.r.t parameters using symbolic information
-- [ ] Define all inputs needed to solve the main problem (estimate $ p^\star $)
+- [ ] Define all inputs needed to solve the main problem (estimate ```{math} p^\star```)
 - [ ] Find trust region solver c++ library to use
 - [ ] Bundle symengine c++ library with Wendy instead of using a system level dependency.
-
+- [ ] Probably want the c++ core code in a seperate repo and to use gitsubmodules. 
 
 
 ## Future
