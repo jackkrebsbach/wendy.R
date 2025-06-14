@@ -1,10 +1,6 @@
 ---
 Title: Test Functions and Matrices 
 author: Jack Krebsbach
-format:
- typst:
-    toc: true
-    section-numbering: 1.1.a
 ---
 
 # Wendy
@@ -14,7 +10,6 @@ Load libraries
 ```{r}
 library(reticulate)
 ```
-
 
 ## Test functions
 
@@ -37,10 +32,7 @@ t = np.arange(-1, 1, 0.01)
 
 plt.clf()
 plt.plot(t, phi(t, r=1))
-```
-
-What about a different centering?
-```{python}
+# What about a different centering?
 t = np.arange(-1, 3, 0.01)
 plt.plot(t, phi(t, r=3, c=1))
 ```
@@ -60,18 +52,18 @@ dt = 0.05
 tt = np.arange(0, 10, dt)  # 50 points
 
 
-def build_chunks(n_diamter, n_test_functions):
-    # Build chunks
-    chunks = [
+def build_test_function_support_indicies(n_diameter, n_test_functions, len_tt):
+    # Build chunks of indices
+    indicies = [
         list(range(j * n_diameter, (j + 1) * n_diameter))
         for j in range(n_test_functions)
     ]
 
-    # Need to fill in the gap later if len % diamter != 0
+    # Need to fill in the gap later if len % diameter != 0
     if len_tt % n_diameter != 0:
-        last_chunk_end = chunks[-1][-1]
-        chunks.append([range(last_chunk_end, len_tt)])
-    return chunks
+        last_chunk_end = indicies[-1][-1]
+        indicies.append([range(last_chunk_end, len_tt)])
+    return indicies
 
 
 def buildVk(n_radius, tt):
@@ -80,15 +72,16 @@ def buildVk(n_radius, tt):
     mp1 = len(tt) - 1  # last index
     n_test_functions = len_tt // n_diameter
 
-    chunks = build_chunks(n_diameter, n_test_functions)
+    indicies = build_test_function_support_indicies(
+        n_diameter, n_test_functions, len_tt
+    )
 
-    V = np.zeros((len(chunks), len_tt))
+    V = np.zeros((len(indicies), len_tt))
 
     xx = np.linspace(-1, 1, n_diameter)
     v_rowk = phi(xx)
 
-    for i, support_indices in enumerate(chunks):
-        print(len(support_indices))
+    for i, support_indices in enumerate(indicies):
         V[i, support_indices] = v_rowk[: len(support_indices)]
     return V
 
@@ -96,7 +89,6 @@ def buildVk(n_radius, tt):
 radii = np.arange(10, 16, 1)
 
 V_full = np.vstack([buildVk(int(i), tt) for i in radii])
-print(V_full.shape)
-print(n_test_functions)
-print(n_test_functions * len(radii))
+V_full
 ```
+
