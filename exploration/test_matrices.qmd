@@ -48,11 +48,12 @@ def phi(t, eta=9):
 # Gap of 1 (the test functions don't overlap at all) maximum amount of test functions
 # The test functions are compactly supported so they are zero at tt[0] and tt[mp1].
 
-dt = 0.05
-tt = np.arange(0, 10, dt)  # 50 points
+dt = 0.1
+tt = np.arange(0, 1, dt)  # 50 points
 
 
 def build_test_function_support_indicies(n_diameter, n_test_functions, len_tt):
+
     # Build chunks of indices
     indicies = [
         list(range(j * n_diameter, (j + 1) * n_diameter))
@@ -61,15 +62,22 @@ def build_test_function_support_indicies(n_diameter, n_test_functions, len_tt):
 
     # Need to fill in the gap later if len % diameter != 0
     if len_tt % n_diameter != 0:
+        print(indicies)
         last_chunk_end = indicies[-1][-1]
         indicies.append([range(last_chunk_end, len_tt)])
     return indicies
 
 
-def buildVk(n_radius, tt):
-    n_diameter = 2 * n_radius + 1
+def build_full_test_function_matrix(n_radius, tt):
     len_tt = len(tt)
     mp1 = len(tt) - 1  # last index
+
+    n_diameter = 2 * n_radius + 1
+
+    # diameter can't be larger than the domain
+    if n_diameter > len_tt - 2:
+        n_diameter = 3
+
     n_test_functions = len_tt // n_diameter
 
     indicies = build_test_function_support_indicies(
@@ -79,7 +87,7 @@ def buildVk(n_radius, tt):
     V = np.zeros((len(indicies), len_tt))
 
     xx = np.linspace(-1, 1, n_diameter)
-    v_rowk = phi(xx)
+    v_rowk = phi(xx) / np.linalg.norm(phi(xx), ord=2)  # For stability
 
     for i, support_indices in enumerate(indicies):
         V[i, support_indices] = v_rowk[: len(support_indices)]
@@ -88,7 +96,7 @@ def buildVk(n_radius, tt):
 
 radii = np.arange(10, 16, 1)
 
-V_full = np.vstack([buildVk(int(i), tt) for i in radii])
+V_full = np.vstack([build_full_test_function_matrix(int(i), tt) for i in radii])
 V_full
 ```
 
