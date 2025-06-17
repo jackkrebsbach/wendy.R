@@ -126,3 +126,12 @@ D <- w$D # Dimension of system
 w$log_details()
 
 ```
+
+
+```{python}
+import numpy as np
+
+x = np.array([1, 2, 3])
+y = z
+
+```
