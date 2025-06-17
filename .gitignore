@@ -8,3 +8,4 @@ pkg/test/*
 !pkg/test/*.*
 !pkg/test/Makefile
 .idea
+.vscode

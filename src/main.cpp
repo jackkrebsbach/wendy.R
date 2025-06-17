@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 
-#include "./core/wendy.h"
+#include "./core/src/wendy.h"
 
 using namespace Rcpp;
 

@@ -1,7 +1,7 @@
 
 #include <Rcpp.h>
-
-#include "./pkg/core/wendy.h"
+// At this point in time will not work
+#include "../src/core/src/wendy.h"
 
 using namespace Rcpp;
 
