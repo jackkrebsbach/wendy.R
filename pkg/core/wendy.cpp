@@ -7,7 +7,7 @@ Wendy::Wendy(Rcpp::CharacterVector f_vec, NumericMatrix U, NumericVector p0) {
   J = p0.length(); // Number of parameters in the system
   D = U.cols();    // Dimension of the system
 
-  // First need to conver the Rcpp::CharacterVector to the std vector
+  // First need to convert the Rcpp::CharacterVector to the std vector
   std::vector<std::string> f(f_vec.size());
   for (int i = 0; i < f_vec.size(); ++i) {
     f[i] = Rcpp::as<std::string>(f_vec[i]);
@@ -18,10 +18,6 @@ Wendy::Wendy(Rcpp::CharacterVector f_vec, NumericMatrix U, NumericVector p0) {
   auto u_symbols = create_symbolic_vars("u", D);
 
   auto grad_p_f = compute_jacobian(sym_system, p_symbols);
-  // auto grad_u_f = compute_jacobian(sym_system, u_symbols);
-  // auto grad_pp_f = compute_jacobian(grad_p_f, p_symbols);
-  // auto grad_up_f = compute_jacobian(grad_u_f, p_symbols);
-  // auto grad_pu_f = compute_jacobian(grad_p_f, u_symbols);
 
   sym_system_jac = grad_p_f;
 }
