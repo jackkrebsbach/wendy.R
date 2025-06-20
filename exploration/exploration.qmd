@@ -20,6 +20,12 @@ library(reticulate)
 
 Let us generate some data so we can explore optimizing the test function radius so that the integral error does not dominate the noise. We will look at the goodwind system in 2-Dimensions.
 ```{python}
+import numpy as np
+from scipy.integrate import quad
+import matplotlib.pyplot as plt
+from scipy.integrate import quad
+
+
 def goodwin_2d(t, u, p):
     """
     Goodwin 2D oscillator system
@@ -130,8 +136,81 @@ w$log_details()
 
 ```{python}
 import numpy as np
+import matplotlib.pyplot as plt
 
-x = np.array([1, 2, 3])
-y = z
+l = 4
+M = 20
+n = M * l
 
+pts = [np.exp((2j * np.pi * m * n) / M) for m in range(0, M + 1)]
+
+print(np.real(sum(pts)))
+```
+
+```{python}
+plt.clf()
+x = np.real(pts)
+y = np.imag(pts)
+plt.plot(x, y)
+```
+
+We use the Discrete Fourier Transform (DFT) to approximate the Fourier Coefficients of the Fourier Transform.
+
+
+```{python}
+def f(t):
+    return np.sin(2 * np.pi * t) + 0.5 * np.cos(4 * np.pi * t)
+
+
+def fourier_series_coeffs(func, T, N):
+    """Compute N Fourier series coefficients for func on [0, T]"""
+    coeffs = []
+    for k in range(N):
+        integrand = lambda t: func(t) * np.exp(-1j * 2 * np.pi * k * t / T)
+        c_k, _ = quad(lambda t: np.real(integrand(t)), 0, T)
+        c_k_im, _ = quad(lambda t: np.imag(integrand(t)), 0, T)
+        c_k = (c_k + 1j * c_k_im) / T
+        coeffs.append(c_k)
+    return np.array(coeffs)
+
+
+N = 32
+T = 1.0
+t_samples = np.linspace(0, T, N, endpoint=False)
+x_samples = f(t_samples)
+
+dft_coeffs = np.fft.fft(x_samples) / N
+fs_coeffs = fourier_series_coeffs(f, T, N)
+
+plot()
+```
+
+
+Now we can use undersampling to approximate higher modes that N/2
+```{python}
+m = 4
+
+print(f"DFT coefficient for mode {m}: {dft_coeffs[m]}")
+print(f"Fourier series coefficient for mode {m}: {fs_coeffs[m]}")
+print(f"Absolute error: {abs(dft_coeffs[m] - fs_coeffs[m])}")
+
+# We see that the 31 mode is not estimated well at all by the DFT!
+print(dft_coeffs[N - 2])
+print(fs_coeffs[N - 2])
+```
+
+```{python}
+s = 4  # Subsampling factor
+N_sub = N // s
+t_sub = t_samples[::s]
+x_sub = x_samples[::s]
+dft_sub = np.fft.fft(x_sub) / N_sub
+
+# The m-th mode in the original data aliases to m' in the subsampled DFT
+m = 31  # Try a high mode
+m_alias = m % N_sub
+
+print(f"Original DFT coefficient for mode {m}: {dft_coeffs[m]}")
+print(f"Subsampled DFT coefficient for aliased mode {m_alias}: {dft_sub[m_alias]}")
+print(f"Fourier series coefficient for mode {m}: {fs_coeffs[m]}")
 ```
