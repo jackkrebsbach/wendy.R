@@ -1,3 +1,5 @@
+CXX_STD = CXX20
+CXXFLAGS += -std=c++20
 PKG_CPPFLAGS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::CxxFlags()") \
                -I/opt/homebrew/include
 

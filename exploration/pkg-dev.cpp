@@ -1,22 +1,38 @@
-
-#pragma once
 #include "../src/core/src/wendy.h"
 #include <Rcpp.h>
-#include <xtensor/xarray.hpp>
-#include <xtensor/xtensor.hpp>
-#include <xtensor/xadapt.hpp>
+#include <xtensor/containers/xarray.hpp>
+#include <xtensor/views/xview.hpp>
+#include <xtensor/containers/xadapt.hpp>
+
 #include <vector>
 #include <string>
 
 class WendyR : public Wendy {
 public:
-    WendyR(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0)
+    WendyR(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0, Rcpp::NumericMatrix tt)
         : Wendy(
             Rcpp::as<std::vector<std::string>>(f),
             as_xtarray(U),
-            as_float_vector(p0)
+            as_float_vector(p0),
+            as_xtarray(tt)
         )
     {}
+    size_t getD() const { return D; }
+    size_t getJ() const { return J; }
+    
+     Rcpp::NumericMatrix getV() const {
+        auto shape = V.shape();
+        Rcpp::NumericMatrix mat(shape[0], shape[1]);
+        for (size_t i = 0; i < shape[0]; ++i)
+            for (size_t j = 0; j < shape[1]; ++j)
+                mat(i, j) = V(i, j);
+        return mat;
+    }
+
+
+    void log_details() const { Wendy::log_details(); }
+    void build_test_function_matrices() { Wendy::build_test_function_matrices(); }
+
 
     static xt::xarray<double> as_xtarray(const Rcpp::NumericMatrix& mat) {
         std::vector<size_t> shape = {static_cast<size_t>(mat.nrow()), static_cast<size_t>(mat.ncol())};
@@ -30,12 +46,13 @@ public:
     }
 };
 
-
-RCPP_MODULE(WENDy) {
+RCPP_MODULE(WendyR) {
+    using namespace Rcpp;
     class_<WendyR>("WendyR")
-        .constructor<CharacterVector, NumericMatrix, NumericVector>()
-        .field("D", &Wendy::D)
-        .field("J", &Wendy::J)
-        .field("min_radius", &Wendy::min_radius)
-        .method("log_details", &Wendy::log_details);
+        .constructor<CharacterVector, NumericMatrix, NumericVector, NumericMatrix>()
+        .method("getD", &WendyR::getD)
+        .method("getJ", &WendyR::getJ)
+        .method("log_details", &WendyR::log_details)
+        .method("getV", &WendyR::getV)
+        .method("build_test_function_matrices", &WendyR::build_test_function_matrices);
 }
