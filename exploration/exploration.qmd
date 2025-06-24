@@ -161,3 +161,13 @@ Rcpp::compileAttributes()
 devtools::load_all()
 ```
 
+
+```{r}
+library(WENDyMLE)
+
+w <- new(WENDyMLE::WendyR, du, U, p_hat, matrix(tt, ncol = 1))
+w$build_test_function_matrices()
+V_full <- w$getV()
+
+```
+
