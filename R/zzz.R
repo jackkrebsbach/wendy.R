@@ -1,3 +1,3 @@
 .onLoad <- function(libname, pkgname) {
-  loadModule("WENDy", TRUE)
+  Rcpp::loadModule("WendyR", TRUE)
 }

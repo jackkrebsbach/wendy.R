@@ -147,3 +147,17 @@ V_full <- w$getV()
 V_full
 ```
 
+
+Now try to load the library
+
+```{r}
+print(getwd())
+library(devtools)
+library(terra)
+
+devtools::clean_dll()
+devtools::document()
+Rcpp::compileAttributes()
+devtools::load_all()
+```
+

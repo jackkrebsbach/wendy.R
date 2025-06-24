@@ -1,13 +1,14 @@
 CXX_STD = CXX20
-CXXFLAGS += -std=c++20
+
 PKG_CPPFLAGS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::CxxFlags()") \
                -I/opt/homebrew/include
 
 PKG_LIBS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()") \
            -L/opt/homebrew/lib \
-           -lsymengine -lflint -lgmp -lmpfr
+           -lsymengine -lflint -lgmp -lmpfr -lfmt
 
-SOURCES = main.cpp RcppExports.cpp $(wildcard core/*.cpp)
+
+SOURCES = main.cpp RcppExports.cpp $(wildcard core/src/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 all: $(SHLIB)
