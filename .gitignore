@@ -4,9 +4,6 @@
 *.DS_Store 
 *.o
 *.so
-pkg/core/main
-pkg/test/*
-!pkg/test/*.*
-!pkg/test/Makefile
+*.tmp
 .idea
 .vscode

@@ -15,7 +15,6 @@ Load libraries
 library(Rcpp)
 library(symengine)
 library(devtools)
-source("R/example.R")
 ```
 
 ## For local development sourcing cpp files
@@ -30,10 +29,11 @@ Sys.setenv("PKG_LIBS" = "-L/opt/homebrew/lib -lsymengine -lflint -lgmp -lmpfr -l
 
 Rcpp::sourceCpp('exploration/pkg-dev.cpp')
 
-loadModule('WendyR', TRUE)
+loadModule('WendyRDev', TRUE)
 
-w <- new(WendyR, du, U, p_hat, matrix(tt, ncol = 1))
-w$log_details()
+
+source("R/example.R")
+w <- new(WendyRDev, du, U, p_hat, matrix(tt, ncol = 1))
 w$build_test_function_matrices()
 V_full <- w$getV()
 V_full

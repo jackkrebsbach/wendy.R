@@ -4,8 +4,14 @@ goodwin_3d <- function(u, p) {
   u1 <- u[1]
   u2 <- u[2]
   u3 <- u[3]
-  p1 <- p[1]; p2 <- p[2]; p3 <- p[3]; p4 <- p[4]
-  p5 <- p[5]; p6 <- p[6]; p7 <- p[7]; p8 <- p[8]
+  p1 <- p[1]
+  p2 <- p[2]
+  p3 <- p[3]
+  p4 <- p[4]
+  p5 <- p[5]
+  p6 <- p[6]
+  p7 <- p[7]
+  p8 <- p[8]
   
   du1dt <- p1 / (2.15 + p3 * u3^p4) - p2 * u1
   du2dt <- p5 * u1 - p6 * u2
@@ -14,7 +20,7 @@ goodwin_3d <- function(u, p) {
   c(du1dt, du2dt, du3dt)
 }
 
-npoints <- 100
+npoints <- 20
 t_span <- c(0, 20)
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 dt <- t_eval[2] - t_eval[1]
