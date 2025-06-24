@@ -1,3 +1,4 @@
+library(symengine)
 
 goodwin_3d <- function(u, p) {
   u1 <- u[1]
