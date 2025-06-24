@@ -15,6 +15,7 @@ Load libraries
 library(reticulate)
 library(Rcpp)
 library(symengine)
+library(devtools)
 ```
 
 
@@ -104,8 +105,6 @@ Now lets look at the system in R and see how we can build a symbolic representat
 I explored trying to pass an R function and building it symbolically in cpp, but could not get around it. So looks like we will have to use symengine as a dependency to build the system symbolically in R and then passing it to rcpp.
 
 ```{r}
-library(Rcpp)
-library(symengine)
 
 f <- function(u, p, t) {
   du1 <- p[[1]] / (2.15 + p[[3]] * u[[3]]^p[[4]]) - p[[2]] * u[[1]]
@@ -152,9 +151,6 @@ Now try to load the library
 
 ```{r}
 print(getwd())
-library(devtools)
-library(terra)
-
 devtools::clean_dll()
 devtools::document()
 Rcpp::compileAttributes()
@@ -168,6 +164,5 @@ library(WENDyMLE)
 w <- new(WENDyMLE::WendyR, du, U, p_hat, matrix(tt, ncol = 1))
 w$build_test_function_matrices()
 V_full <- w$getV()
-
 ```
 
