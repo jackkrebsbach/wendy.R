@@ -22,15 +22,12 @@ library(devtools)
 ```{r}
 unlink(tempdir(), recursive = TRUE)
 
-Sys.setenv("CXX_STD" = "CXX20")
-Sys.setenv(DYLD_LIBRARY_PATH = "/opt/homebrew/lib")
 Sys.setenv("PKG_CXXFLAGS" = "-std=c++20 -I/opt/homebrew/include")
-Sys.setenv("PKG_LIBS" = "-L/opt/homebrew/lib -lsymengine -lflint -lgmp -lmpfr -lfmt")
+Sys.setenv("PKG_LIBS" = "-L/opt/homebrew/lib -lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3")
 
 Rcpp::sourceCpp('exploration/pkg-dev.cpp')
 
 loadModule('WendyRDev', TRUE)
-
 
 source("R/example.R")
 w <- new(WendyRDev, du, U, p_hat, matrix(tt, ncol = 1))
