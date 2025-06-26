@@ -27,7 +27,9 @@ public:
   }
 
   void log_details() const { Wendy::log_details(); }
-  void build_test_function_matrices() { Wendy::build_test_function_matrices(); }
+  void build_full_test_function_matrices() {
+    Wendy::build_full_test_function_matrices();
+  }
 
   static xt::xarray<double> as_xtarray(const Rcpp::NumericMatrix &mat) {
     std::vector<size_t> shape = {static_cast<size_t>(mat.nrow()),
@@ -52,6 +54,6 @@ RCPP_MODULE(WendyRDev) {
       .method("getJ", &WendyRDev::getJ)
       .method("log_details", &WendyRDev::log_details)
       .method("getV", &WendyRDev::getV)
-      .method("build_test_function_matrices",
-              &WendyRDev::build_test_function_matrices);
+      .method("build_full_test_function_matrices",
+              &WendyRDev::build_full_test_function_matrices);
 }
