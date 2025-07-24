@@ -20,7 +20,7 @@ goodwin_3d <- function(u, p) {
   c(du1dt, du2dt, du3dt)
 }
 
-npoints <- 20
+npoints <- 500
 t_span <- c(0, 20)
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 dt <- t_eval[2] - t_eval[1]

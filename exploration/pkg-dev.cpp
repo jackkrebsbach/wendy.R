@@ -3,7 +3,6 @@
 #include <xtensor/containers/xadapt.hpp>
 #include <xtensor/containers/xarray.hpp>
 #include <xtensor/views/xview.hpp>
-
 #include <string>
 #include <vector>
 
@@ -23,6 +22,15 @@ public:
     for (size_t i = 0; i < shape[0]; ++i)
       for (size_t j = 0; j < shape[1]; ++j)
         mat(i, j) = V(i, j);
+    return mat;
+  }
+    Rcpp::NumericMatrix getVprime() const {
+    auto shape = V_prime.shape();
+    Rcpp::NumericMatrix mat(shape[0], shape[1]);
+
+    for (size_t i = 0; i < shape[0]; ++i)
+      for (size_t j = 0; j < shape[1]; ++j)
+        mat(i, j) = V_prime(i, j);
     return mat;
   }
 
@@ -54,6 +62,7 @@ RCPP_MODULE(WendyRDev) {
       .method("getJ", &WendyRDev::getJ)
       .method("log_details", &WendyRDev::log_details)
       .method("getV", &WendyRDev::getV)
+      .method("getVprime", &WendyRDev::getVprime)
       .method("build_full_test_function_matrices",
               &WendyRDev::build_full_test_function_matrices);
 }

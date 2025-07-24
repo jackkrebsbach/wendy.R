@@ -22,8 +22,9 @@ library(devtools)
 ```{r}
 unlink(tempdir(), recursive = TRUE)
 
-Sys.setenv("PKG_CXXFLAGS" = "-std=c++20 -I/opt/homebrew/include -I/opt/homebrew/include/eigen3")
+Sys.setenv("PKG_CXXFLAGS" = "-std=c++20 -I/opt/homebrew/include -I/opt/homebrew/include/eigen3 -I/opt/homebrew/Caskroom/miniforge/base/include")
 Sys.setenv("PKG_LIBS" = "-L/opt/homebrew/lib -lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3")
+
 
 Rcpp::sourceCpp('exploration/pkg-dev.cpp')
 
@@ -32,8 +33,11 @@ loadModule('WendyRDev', TRUE)
 source("R/example.R")
 w <- new(WendyRDev, du, U, p_hat, matrix(tt, ncol = 1))
 w$build_full_test_function_matrices()
+
 V_full <- w$getV()
-V_full
+V_p <- w$getVprime()
+dim(V_p)
+dim(V_full)
 ```
 
 
@@ -58,6 +62,20 @@ library(WENDyMLE)
 Rcpp::loadModule("WendyR")
 w <- new(WendyR, du, U, p_hat, matrix(tt, ncol = 1))
 w$build_test_function_matrices()
-V_full <- w$getV()
+v_full <- w$getV()
+
 ```
 
+
+```{r}
+hes1modelODE <- function(theta, x, tvec) {
+ P <- x[, 1]
+ M <- x[, 2]
+ H <- x[, 3]
+ PMHdt <- array(0, c(nrow(x), ncol(x)))
+ PMHdt[, 1] <- -theta[1] * P * H + theta[2] * M - theta[3] * P
+ PMHdt[, 2] <- -theta[4] * M + theta[5] / (1 + P^2)
+ PMHdt[, 3] <- -theta[1] * P * H + theta[6] / (1 + P^2) - theta[7] * H
+ PMHdt
+ }
+```
