@@ -22,22 +22,30 @@ library(devtools)
 ```{r}
 unlink(tempdir(), recursive = TRUE)
 
-Sys.setenv("PKG_CXXFLAGS" = "-std=c++20 -I/opt/homebrew/include -I/opt/homebrew/include/eigen3 -I/opt/homebrew/Caskroom/miniforge/base/include")
-Sys.setenv("PKG_LIBS" = "-L/opt/homebrew/lib -lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3")
+Sys.setenv("PKG_CXXFLAGS" = paste(
+    Rcpp:::CxxFlags(),
+  "-std=c++20",
+  "-I/opt/homebrew/include",
+  "-I/opt/homebrew/include/eigen3",
+  "-I/opt/homebrew/Caskroom/miniforge/base/envs/cling/include",  # <-- add this
+  "-I/Users/krebsbach/ml/wendy/src/core/external/CppNumericalSolvers/include",
+  "-I/Users/krebsbach/ml/wendy/src/core/external/exprtk/include",
+  "-I/opt/homebrew/Caskroom/miniforge/base/include"
+))
 
+Sys.setenv("PKG_LIBS" = paste(
+    Rcpp:::LdFlags(),
+  "-L/opt/homebrew/lib",
+  "-L/opt/homebrew/Caskroom/miniforge/base/",
+  "-lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3"
+))
+
+source("R/example.R")
 
 Rcpp::sourceCpp('exploration/pkg-dev.cpp')
 
-loadModule('WendyRDev', TRUE)
+WendySolver(du, U, 1.2*p_star, matrix(tt, ncol = 1))
 
-source("R/example.R")
-w <- new(WendyRDev, du, U, p_hat, matrix(tt, ncol = 1))
-w$build_full_test_function_matrices()
-
-V_full <- w$getV()
-V_p <- w$getVprime()
-dim(V_p)
-dim(V_full)
 ```
 
 
@@ -63,19 +71,4 @@ Rcpp::loadModule("WendyR")
 w <- new(WendyR, du, U, p_hat, matrix(tt, ncol = 1))
 w$build_test_function_matrices()
 v_full <- w$getV()
-
-```
-
-
-```{r}
-hes1modelODE <- function(theta, x, tvec) {
- P <- x[, 1]
- M <- x[, 2]
- H <- x[, 3]
- PMHdt <- array(0, c(nrow(x), ncol(x)))
- PMHdt[, 1] <- -theta[1] * P * H + theta[2] * M - theta[3] * P
- PMHdt[, 2] <- -theta[4] * M + theta[5] / (1 + P^2)
- PMHdt[, 3] <- -theta[1] * P * H + theta[6] / (1 + P^2) - theta[7] * H
- PMHdt
- }
 ```
