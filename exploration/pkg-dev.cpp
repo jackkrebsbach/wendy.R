@@ -49,12 +49,10 @@ static Rcpp::NumericVector as_numeric_vector(const xt::xtensor<double, 1>& arr)
 
 
 // [[Rcpp::export]]
-Rcpp::List WendySolver(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0,
-                 Rcpp::NumericMatrix tt, bool compute_svd_)
+Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0, Rcpp::NumericMatrix tt, bool compute_svd_)
 {
 
-  const auto w = new Wendy(Rcpp::as<std::vector<std::string>>(f), as_xtarray(U),
-                       as_double_vector(p0), as_xtarray(tt),compute_svd_);
+  const auto w = new Wendy(Rcpp::as<std::vector<std::string>>(f), as_xtarray(U), as_double_vector(p0), as_xtarray(tt), compute_svd_);
 
   w->build_full_test_function_matrices();
   w->build_objective_function();
