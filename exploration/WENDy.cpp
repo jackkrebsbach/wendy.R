@@ -1,7 +1,6 @@
 #include "../src/core/src/wendy.h"
 #include <Rcpp.h>
 
-
 static xt::xarray<double> as_xtarray(const Rcpp::NumericMatrix &mat)
 {
   std::vector<size_t> shape = {static_cast<size_t>(mat.nrow()),

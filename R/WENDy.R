@@ -22,7 +22,7 @@ Sys.setenv("PKG_LIBS" = paste(
   "-lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3"
 ))
 
-Rcpp::sourceCpp('exploration/pkg-dev.cpp')
+Rcpp::sourceCpp('exploration/WENDy.cpp')
 
 
 WendySolver <- function(f, U, p0, tt, compute_svd_ = TRUE){
