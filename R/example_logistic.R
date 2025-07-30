@@ -36,7 +36,7 @@ plot(U, cex = 0.5)
 
 # Solve for parameters
 source('R/WENDy.R')
-data <- WendySolver(logistic, U, p0, tt) 
+data <- WendySolver(logistic, U, p0, tt, compute_svd_ = TRUE, optimize_ = TRUE) 
 
 p_hat <- data$p_hat
 sol_hat <- deSolve::ode(u0, t_eval, modelODE, p_hat)

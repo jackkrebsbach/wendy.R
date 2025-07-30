@@ -22,7 +22,7 @@ Sys.setenv("PKG_LIBS" = paste(
 Rcpp::sourceCpp('exploration/WENDy.cpp')
 
 
-WendySolver <- function(f, U, p0, tt, compute_svd_ = TRUE){
+WendySolver <- function(f, U, p0, tt, compute_svd_ = TRUE, optimize_ = TRUE){
   
   u <- lapply(1:ncol(U), function(i) symengine::S(paste0("u", i)))
   p <- lapply(1:length(p0), function(i) symengine::S(paste0("p", i)))
@@ -31,6 +31,6 @@ WendySolver <- function(f, U, p0, tt, compute_svd_ = TRUE){
   du <- f(u, p, t) |>
     vapply(as.character, character(1))
 
-    return(SolveWendyProblem(du, U, p0, tt, compute_svd_))
+    return(SolveWendyProblem(du, U, p0, tt, compute_svd_, optimize_))
 
 }
