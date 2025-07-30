@@ -1,8 +1,8 @@
-{
-# Setup
 library(symengine)
 library(deSolve)
-source('R/WENDy.R')
+
+{
+# Setup
 set.seed(42)
 
 

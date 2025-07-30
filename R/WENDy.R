@@ -19,7 +19,8 @@ Sys.setenv("PKG_LIBS" = paste(
   "-lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3"
 ))
 
-Rcpp::sourceCpp('exploration/WENDy.cpp')
+
+Rcpp::sourceCpp('src/main.cpp')
 
 
 WendySolver <- function(f, U, p0, tt, compute_svd_ = TRUE, optimize_ = TRUE){
