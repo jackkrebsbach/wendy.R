@@ -55,6 +55,7 @@ Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcp
 
   w->build_full_test_function_matrices();
   w->build_objective_function();
+  w->optimize_parameters();
   
 
   return Rcpp::List::create(
