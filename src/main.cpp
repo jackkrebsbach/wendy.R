@@ -45,10 +45,10 @@ static Rcpp::NumericVector as_numeric_vector(const xt::xtensor<double, 1>& arr)
 
 
 // [[Rcpp::export]]
-Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0, Rcpp::NumericMatrix tt, bool compute_svd_, bool optimize_)
+Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0, Rcpp::NumericMatrix tt, double noise_sd, bool compute_svd_, bool optimize_)
 {
 
-  const auto w = new Wendy(Rcpp::as<std::vector<std::string>>(f), as_xtarray(U), as_double_vector(p0), as_xtarray(tt), compute_svd_);
+  const auto w = new Wendy(Rcpp::as<std::vector<std::string>>(f), as_xtarray(U), as_double_vector(p0), as_xtarray(tt), noise_sd, compute_svd_);
 
   w->build_full_test_function_matrices();
   w->build_objective_function();
@@ -65,6 +65,7 @@ Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcp
       Rcpp::Named("min_radius_errors") = Rcpp::wrap(as_numeric_vector(w->min_radius_errors)),
       Rcpp::Named("min_radius_radii") = Rcpp::wrap(as_numeric_vector(w->min_radius_radii)),
       Rcpp::Named("min_radius_ix") = Rcpp::wrap(w->min_radius_ix),
-      Rcpp::Named("min_radius") = Rcpp::wrap(w->min_radius)
+      Rcpp::Named("min_radius") = Rcpp::wrap(w->min_radius),
+      Rcpp::Named("radii") = Rcpp::wrap(w->radii)
   );
 }
