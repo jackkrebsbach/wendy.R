@@ -16,7 +16,6 @@ npoints <- 120;
 t_span <- c(0, 10); t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 
 
-# Define input for deSolve
 modelODE <- function(tvec, state, parameters) {
     list(as.vector(logistic(state, parameters, tvec)))
 }

@@ -1,7 +1,13 @@
+unlink(tempdir(), recursive = TRUE)
 
 Sys.setenv("PKG_CXXFLAGS" = paste(
     paste0(Rcpp:::CxxFlags()),
   "-std=c++20",
+  "-O3",
+  "-march=native",
+  "-ffast-math",
+  "-funroll-loops",
+  "-flto",
   "-I/opt/homebrew/include",
   "-I/opt/homebrew/include/Eigen3",
   "-I/Users/krebsbach/ml/wendy/src/core/external/CppNumericalSolvers/include",
