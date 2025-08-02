@@ -8,6 +8,7 @@ Sys.setenv("PKG_CXXFLAGS" = paste(
   "-ffast-math",
   "-funroll-loops",
   "-flto",
+  "-DNDEBUG",
   "-I/opt/homebrew/include",
   "-I/opt/homebrew/include/Eigen3",
   "-I/Users/krebsbach/ml/wendy/src/core/external/CppNumericalSolvers/include",
