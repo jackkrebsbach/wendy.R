@@ -19,7 +19,6 @@ goodwin <- function(u, p, t) {
 npoints <- 100
 p_star <- c(3.4884, 0.0969, 1, 10, 0.0969, 0.0581, 0.0969, 0.0775)
 p0 <- c(2, 0.05, 1.5, 13, 0.15, 0.12, 0.18, 0.10)
-
 u0 <- c(0.3617, 0.9137, 1.393)
 t_span <- c(0, 80); 
 
@@ -34,6 +33,7 @@ modelODE <- function(tvec, state, parameters) {
 noise_sd <- 0.05
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 sol <- deSolve::ode( y = u0, times = t_eval, func = modelODE, parms = p_star)
+
 noise <- matrix(rnorm(nrow(sol) * (ncol(sol) - 1), mean = 0, sd = noise_sd), nrow = nrow(sol))
 U <- sol[,-1] + noise
 tt <- matrix(sol[,1], ncol = 1)
@@ -55,4 +55,5 @@ sol_hat <- deSolve::ode(u0, t_eval, modelODE, p_hat)
 
 # Compare data and data from estimated parameters
 plot(U[,3], cex = 0.5) 
-points(sol[, 3], cex = 0.75, col = "green", pch = 16)
+points(sol[, 3], cex = 0.5)
+

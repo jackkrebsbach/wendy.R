@@ -1,5 +1,3 @@
-set.seed(42)
-
 unlink(tempdir(), recursive = TRUE)
 
 Sys.setenv("PKG_CXXFLAGS" = paste(
