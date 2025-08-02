@@ -1,4 +1,3 @@
-unlink(tempdir(), recursive = TRUE)
 
 Sys.setenv("PKG_CXXFLAGS" = paste(
     paste0(Rcpp:::CxxFlags()),
@@ -19,7 +18,6 @@ Sys.setenv("PKG_LIBS" = paste(
 
 
 Rcpp::sourceCpp('src/main.cpp')
-
 
 WendySolver <- function(f, U, p0, tt, noise_sd = 0.05, compute_svd_ = TRUE, optimize_ = TRUE){
   
