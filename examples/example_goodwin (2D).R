@@ -1,8 +1,8 @@
 
 # %%
-source('R/WENDy.R')
 library(symengine)
 library(deSolve)
+source('R/WENDy.R')
 # %%
 set.seed(42)
 goodwin <- function(u, p, t) {
@@ -11,7 +11,7 @@ goodwin <- function(u, p, t) {
   list(du1, du2)
 }
 
-npoints <- 70
+npoints <- 100
 p_star <- c(72, 1, 2, 1, 1)
 p0 <- c(65, 2.5, 3, 1.5, 2)
 u0 <- c(7, -10)

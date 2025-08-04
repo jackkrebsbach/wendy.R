@@ -1,5 +1,6 @@
 #include "./core/src/wendy.h"
 #include <Rcpp.h>
+#include <string>
 
 static xt::xarray<double> as_xtarray(const Rcpp::NumericMatrix &mat)
 {
@@ -45,10 +46,10 @@ static Rcpp::NumericVector as_numeric_vector(const xt::xtensor<double, 1>& arr)
 
 
 // [[Rcpp::export]]
-Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0, Rcpp::NumericMatrix tt, double noise_sd, bool compute_svd_, bool optimize_)
+Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0, Rcpp::NumericMatrix tt, double noise_sd, bool compute_svd_, bool optimize_, std::string dist_type)
 {
 
-  const auto w = new Wendy(Rcpp::as<std::vector<std::string>>(f), as_xtarray(U), as_double_vector(p0), as_xtarray(tt), noise_sd, compute_svd_);
+  const auto w = new Wendy(Rcpp::as<std::vector<std::string>>(f), as_xtarray(U), as_double_vector(p0), as_xtarray(tt), noise_sd, compute_svd_, dist_type);
 
   w->build_full_test_function_matrices();
   w->build_cost_function();

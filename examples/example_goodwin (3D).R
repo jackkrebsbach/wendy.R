@@ -14,7 +14,7 @@ goodwin <- function(u, p, t) {
 }
 
 
-npoints <- 70
+npoints <- 100
 p_star <- c(3.4884, 0.0969, 1, 10, 0.0969, 0.0581, 0.0969, 0.0775)
 p0 <- c(3, 0.1, 4, 12, 0.1, 0.1, 0.1, 0.1)
 u0 <- c(0.3617, 0.9137, 1.393)
@@ -41,3 +41,6 @@ p_hat <- p$p_hat
 sol_hat <- deSolve::ode(u0, t_eval, modelODE, p_hat)[ ,-1]
 plot(U[,3], cex = 0.5) 
 points(sol_hat[, 3], cex = 0.5, col="red")
+
+cat("pstar:", paste(p_star, collapse = " "), "\n")
+cat("phat:", paste(format(p_hat, digits = 3, scientific = FALSE), collapse = " "), "\n")
