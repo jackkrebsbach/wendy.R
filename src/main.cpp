@@ -51,7 +51,7 @@ Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcp
   const auto w = new Wendy(Rcpp::as<std::vector<std::string>>(f), as_xtarray(U), as_double_vector(p0), as_xtarray(tt), noise_sd, compute_svd_);
 
   w->build_full_test_function_matrices();
-  w->build_objective_function();
+  w->build_cost_function();
 
   if (optimize_) {
     w->optimize_parameters();

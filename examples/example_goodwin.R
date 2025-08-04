@@ -14,9 +14,9 @@ goodwin <- function(u, p, t) {
 }
 
 
-npoints <- 120
+npoints <- 70
 p_star <- c(3.4884, 0.0969, 1, 10, 0.0969, 0.0581, 0.0969, 0.0775)
-p0 <- c(2, 0.05, 1.5, 13, 0.15, 0.12, 0.18, 0.10)
+p0 <- c(3, 0.1, 4, 12, 0.1, 0.1, 0.1, 0.1)
 u0 <- c(0.3617, 0.9137, 1.393)
 t_span <- c(0, 80); 
 
@@ -38,6 +38,6 @@ p <- WendySolver(goodwin, U, p0, tt, noise_sd, compute_svd_ = TRUE, optimize_ = 
 
 p_hat <- p$p_hat
 
-sol_hat <- deSolve::ode(u0, t_eval, modelODE, p_hat)
+sol_hat <- deSolve::ode(u0, t_eval, modelODE, p_hat)[ ,-1]
 plot(U[,3], cex = 0.5) 
-points(sol[, 3], cex = 0.5)
+points(sol_hat[, 3], cex = 0.5, col="red")

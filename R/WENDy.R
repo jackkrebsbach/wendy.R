@@ -8,6 +8,7 @@ Sys.setenv("PKG_CXXFLAGS" = paste(
   "-ffast-math",
   "-funroll-loops",
   "-flto",
+  "-fstrict-aliasing",
   "-DNDEBUG",
   "-I/opt/homebrew/include",
   "-I/opt/homebrew/include/Eigen3",
