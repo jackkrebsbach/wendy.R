@@ -1,7 +1,7 @@
 # %%
+library(wendy)
 library(symengine)
 library(deSolve)
-source('R/WENDy.R')
 # %%
 logistic <- function(u, p, t) {
     list(p[[1]] * u[[1]] - p[[2]] * u[[1]]^2)

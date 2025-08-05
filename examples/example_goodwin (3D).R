@@ -1,5 +1,5 @@
 # %%
-source('R/WENDy.R')
+library(wendy)
 library(symengine)
 library(deSolve)
 library(plotly)
@@ -12,8 +12,8 @@ goodwin <- function(u, p, t) {
   list(du1, du2, du3)
 }
 
-noise_sd <- 0.01
-npoints <- 100
+noise_sd <- 0.05
+npoints <- 150
 p_star <- c(3.4884, 0.0969, 1, 10, 0.0969, 0.0581, 0.0969, 0.0775)
 p0 <- c(3, 0.1, 4, 12, 0.1, 0.1, 0.1, 0.1)
 u0 <- c(0.3617, 0.9137, 1.393)
@@ -95,6 +95,8 @@ fig3d <- plot_ly() |>
     marker = list(color = 'black', size = 2, opacity = 0.35)
   ) |>
   layout(
+    paper_bgcolor = 'rgba(0,0,0,0)', # Transparent outer background
+    plot_bgcolor = 'rgba(0,0,0,0)', # Transparent plot area
     legend = list(
       x = 0.02,
       y = 0.98,

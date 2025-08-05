@@ -1,5 +1,5 @@
 # %%
-source('R/WENDy.R')
+library(wendy)
 library(symengine)
 library(deSolve)
 library(plotly)

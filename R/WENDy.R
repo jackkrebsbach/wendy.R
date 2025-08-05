@@ -1,42 +1,15 @@
-unlink(tempdir(), recursive = TRUE)
-
-Sys.setenv(
-  "PKG_CXXFLAGS" = paste(
-    paste0(Rcpp:::CxxFlags()),
-    "-std=c++20",
-    "-O3",
-    "-march=native",
-    "-ffast-math",
-    "-funroll-loops",
-    "-flto",
-    "-fstrict-aliasing",
-    "-DNDEBUG",
-    "-I/opt/homebrew/include",
-    "-I/opt/homebrew/include/Eigen3",
-    "-I/Users/krebsbach/ml/wendy/src/core/external/CppNumericalSolvers/include",
-    "-I/Users/krebsbach/ml/wendy/src/core/external/exprtk/include",
-    "-I/opt/homebrew/Caskroom/miniforge/base/include"
-  )
-)
-
-Sys.setenv(
-  "PKG_LIBS" = paste(
-    paste0(Rcpp:::LdFlags()),
-    "-L/opt/homebrew/lib",
-    "-L/opt/homebrew/Caskroom/miniforge/base/",
-    "-lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3 -lceres"
-  )
-)
-
-
-Rcpp::sourceCpp('src/main.cpp')
-
-DistType <- c("AddGaussian", "LogNormal")
-
-validate_dist_type <- function(x) {
-  match.arg(x, DistType)
-}
-
+#' Estimate parameters using WENDy
+#'
+#' @param f A symbolic function.
+#' @param U Observed data matrix.
+#' @param p0 Initial parameter guess.
+#' @param tt Time vector.
+#' @param noise_sd Standard deviation of noise.
+#' @param compute_svd_ Whether to compute the SVD.
+#' @param optimize_ Whether to optimize the objective.
+#' @param dist_type_ Distribution type ("AddGaussian" or "LogNormal").
+#' @return A list with estimation results.
+#' @export
 WendySolver <- function(
   f,
   U,
@@ -54,6 +27,12 @@ WendySolver <- function(
       nrow(U)
     ))
   }
+  DistType <- c("AddGaussian", "LogNormal")
+
+  validate_dist_type <- function(x) {
+    match.arg(x, DistType)
+  }
+
   u <- lapply(1:ncol(U), function(i) symengine::S(paste0("u", i)))
   p <- lapply(1:length(p0), function(i) symengine::S(paste0("p", i)))
   t <- symengine::S("t")

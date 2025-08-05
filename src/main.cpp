@@ -1,4 +1,4 @@
-#include "./core/src/wendy.h"
+#include <wendy/wendy.h>
 #include <Rcpp.h>
 #include <string>
 

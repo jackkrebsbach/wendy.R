@@ -1,0 +1,22 @@
+CXX_STD = CXX20
+
+PKG_CXXFLAGS = \
+  $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::CxxFlags()") \
+  -O3 \
+  -march=native \
+  -ffast-math \
+  -funroll-loops \
+  -flto \
+  -fstrict-aliasing \
+  -DNDEBUG \
+  -I$(PWD)/core/include \
+  -I/opt/homebrew/include \
+  -I/opt/homebrew/include/Eigen3 \
+  -I/opt/homebrew/Caskroom/miniforge/base/include
+
+PKG_LIBS = \
+  $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
+  $(PWD)/core/lib/libwendy.a \
+  -L/opt/homebrew/lib \
+  -L/opt/homebrew/Caskroom/miniforge/base/ \
+  -lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3 -lceres

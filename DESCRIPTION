@@ -1,4 +1,4 @@
-Package: WENDyMLE
+Package: wendy 
 Type: Package
 Title: Weak Form Estimation of Nonlinear Dynamics
 Version: 1.0
