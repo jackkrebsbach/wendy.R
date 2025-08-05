@@ -20,6 +20,9 @@ set.seed(42)
 ```
 
 ## Logistic  
+::: {.subtitle style="font-size: 50%; text-align: left; color: gray;"}
+[Additive Gaussian Noise]
+:::
 
 <span style="font-size:60%">
 $$
@@ -95,6 +98,9 @@ cat(
 ```
 
 ## Lorenz  
+::: {.subtitle style="font-size: 50%; text-align: left; color: gray;"}
+[Additive Gaussian Noise]
+:::
 
 <span style="font-size:60%">
 $$
@@ -177,6 +183,9 @@ cat(
 ```
 
 ## Goodwin 3D
+::: {.subtitle style="font-size: 50%; text-align: left; color: gray;"}
+[Multiplicative Lognormal Noise]
+:::
 <!-- 
 <div style="font-size:0.15em; text-align:center;">
 $$

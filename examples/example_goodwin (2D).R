@@ -1,7 +1,7 @@
 # %%
+library(wendy)
 library(symengine)
 library(deSolve)
-source('R/WENDy.R')
 # %%
 set.seed(42)
 goodwin <- function(u, p, t) {
