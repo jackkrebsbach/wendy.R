@@ -55,7 +55,15 @@ p <- WendySolver(
 
 p_hat <- p$p_hat
 
-sol_hat <- deSolve::ode(u0, t_eval, modelODE, p_hat)[, -1]
+sol_hat <- deSolve::ode(
+  y = u0,
+  times = t_eval,
+  func = modelODE,
+  parms = p_hat,
+  method = "lsodes",
+  atol = 1e-10,
+  rtol = 1e-10
+)[, -1]
 
 plot(U[, c(1, 2)], cex = 0.5)
 points(sol_hat[, c(1, 2)], cex = 0.5, col = "red")

@@ -1,0 +1,7 @@
+---
+title: "Benchmark WENDy"
+author: "Jack Krebsbach"
+format: revealjs
+---
+
+## Benchmarking WENDy and Gaussian
