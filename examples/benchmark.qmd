@@ -1,7 +1,16 @@
 ---
 title: "Benchmark WENDy"
 author: "Jack Krebsbach"
-format: revealjs
+format: 
+    revealjs:
+        theme: solarized 
 ---
 
-## Benchmarking WENDy and Gaussian
+```{r}
+source('R/WENDy.R')
+library(symengine)
+library(deSolve)
+library(plotly)
+```
+
+## Logistic Example 
