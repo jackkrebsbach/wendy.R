@@ -4,9 +4,18 @@
 
 static xt::xarray<double> as_xtarray(const Rcpp::NumericMatrix &mat)
 {
-  std::vector<size_t> shape = {static_cast<size_t>(mat.nrow()),
-                               static_cast<size_t>(mat.ncol())};
-  return xt::adapt(mat.begin(), mat.size(), xt::no_ownership(), shape);
+    const size_t nrow = mat.nrow();
+    const size_t ncol = mat.ncol();
+    xt::xarray<double> result = xt::zeros<double>({nrow, ncol});
+
+    // Fill result(i, j) = mat(i, j) preserving R layout
+    for (size_t j = 0; j < ncol; ++j) {
+        for (size_t i = 0; i < nrow; ++i) {
+            result(i, j) = mat(i, j);  // Rcpp gives direct access by (i, j)
+        }
+    }
+
+    return result;
 }
 
 static std::vector<double> as_double_vector(const Rcpp::NumericVector &v)

@@ -21,10 +21,10 @@ modelODE <- function(tvec, state, parameters) {
 
 sol <- deSolve::ode(y = u0, times = t_eval, func = modelODE, parms = p_star)
 # Additive Guassian
-# U <- matrix(c(sol[, 2] + rnorm(npoints, mean = 0, sd = noise_sd)), ncol = 1)
+U <- matrix(c(sol[, 2] + rnorm(npoints, mean = 0, sd = noise_sd)), ncol = 1)
 # Log Normal
-noisy <- sol[, 2] * exp(rnorm(npoints, mean = 0, sd = noise_sd))
-U <- matrix(noisy, ncol = 1)
+# noisy <- sol[, 2] * exp(rnorm(npoints, mean = 0, sd = noise_sd))
+# U <- matrix(noisy, ncol = 1)
 
 tt <- matrix(sol[, 1], ncol = 1)
 
@@ -36,7 +36,7 @@ res <- WendySolver(
     noise_sd,
     compute_svd_ = TRUE,
     optimize_ = TRUE,
-    dist_type = "LogNormal"
+    dist_type = "AddGaussian"
 )
 
 p_hat <- res$p_hat

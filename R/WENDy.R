@@ -4,8 +4,7 @@ Sys.setenv(
   "PKG_CXXFLAGS" = paste(
     paste0(Rcpp:::CxxFlags()),
     "-std=c++20",
-    "-O0",
-    "-g",
+    "-O3",
     "-march=native",
     "-ffast-math",
     "-funroll-loops",
@@ -46,9 +45,9 @@ WendySolver <- function(
   noise_sd = 0.05,
   compute_svd_ = TRUE,
   optimize_ = TRUE,
-  dist_type = "AddGaussian"
+  dist_type_ = "AddGaussian"
 ) {
-  if (nrow(tt) != nrow(U)) {
+  if (length(tt) != nrow(U)) {
     stop(sprintf(
       "Length of tt (%d) must match number of rows in U (%d)",
       length(tt),
@@ -70,7 +69,7 @@ WendySolver <- function(
     noise_sd,
     compute_svd_,
     optimize_,
-    dist_type
+    dist_type = dist_type_
   )
 
   data$plot_radius_selection <- function() {
