@@ -14,10 +14,10 @@ lorenz <- function(u, p, t) {
 
 noise_sd <- 0.05
 p_star <- c(10.0, 28.0, 4.0)
-p0 <- c(12.0, 21, 4.0)
+p0 <- c(13.10, 21, 4.0)
 u0 <- c(2, 1, 1)
 
-npoints <- 101
+npoints <- 200
 t_span <- c(0, 10)
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 
@@ -30,6 +30,9 @@ sol <- deSolve::ode(
     times = t_eval,
     func = modelODE_,
     parms = p_star,
+    method = "lsodes",
+    atol = 1e-10,
+    rtol = 1e-10
 )
 
 # Additive Guassian
@@ -38,10 +41,6 @@ noise <- matrix(
     nrow = nrow(sol)
 )
 U <- sol[, -1] + noise
-
-# Log Normal
-# noisy <- sol[, 2] * exp(rnorm(npoints, mean = 0, sd = noise_sd))
-# U <- matrix(noisy, ncol = 1)
 
 tt <- matrix(sol[, 1], ncol = 1)
 
