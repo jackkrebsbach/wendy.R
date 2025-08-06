@@ -64,6 +64,13 @@ jobs:
             coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev \
             libgoogle-glog-dev libgflags-dev libomp-dev libceres-dev
           sudo apt-get install r-cran-rcpp r-cran-devtools
+          pip install conan
+          conan profile detect --force
+          conan install \
+            --requires=symengine/0.14.0 \
+            --build=missing \
+            --generator=CMakeToolchain \
+            --generator=CMakeDeps
           
 
       - name: Install system dependencies (macOS)
@@ -105,17 +112,12 @@ jobs:
             ..
           else
             # Linux configuration
-            pip install conan
-            conan profile detect --force
-            conan install \
-              --requires=symengine/0.14.0 \
-              --build=missing \
-              --generator=CMakeToolchain \
-              --generator=CMakeDeps
           cmake .. \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-            -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+            -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake \
+            -DCMAKE_CXX_STANDARD=17 \
+            -DCMAKE_CXX_STANDARD_REQUIRED=ON \
+            -DCMAKE_INCLUDE_SYSTEM_FLAG_CXX=-isystem
+            -DCMAKE_VERBOSE_MAKEFILE=ON
           fi
           
           cmake --build . --target wendy
