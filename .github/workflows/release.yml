@@ -107,7 +107,7 @@ jobs:
             # Linux configuration
             pip install conan
             conan profile detect --force
-            conan install . \
+            conan install \
               --requires=symengine/0.14.0 \
               --build=missing \
               --generator=CMakeToolchain \
