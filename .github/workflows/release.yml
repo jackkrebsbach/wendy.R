@@ -58,42 +58,10 @@ jobs:
             coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev \
             libgoogle-glog-dev libgflags-dev libomp-dev libceres-dev
 
-      - name: Build SymEngine from source (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          git clone https://github.com/symengine/symengine.git
-          cd symengine
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release \
-                -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-                -DCMAKE_PREFIX_PATH="/usr/local/lib/cmake/symengine;/usr/local" \
-                ..
-          make -j2
-          sudo make install
-          cd ../..
-          rm -rf symengine
-
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
           brew install cmake eigen ceres-solver fftw symengine flint gmp mpfr fmt ipopt pkg-config libomp
-
-      - name: Set up OpenMP environment (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          # Set OpenMP environment variables for macOS
-          echo "OpenMP_ROOT=/opt/homebrew" >> $GITHUB_ENV
-          echo "OpenMP_CXX_FLAGS=-Xpreprocessor -fopenmp" >> $GITHUB_ENV
-          echo "OpenMP_CXX_LIB_NAMES=omp" >> $GITHUB_ENV
-          echo "OpenMP_omp_LIBRARY=/opt/homebrew/opt/libomp/lib/libomp.dylib" >> $GITHUB_ENV
-
-          
-          # Add to CMAKE_PREFIX_PATH
-          echo "CMAKE_PREFIX_PATH=/opt/homebrew:$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
-          
-          # Set compiler flags
-          echo "CPPFLAGS=-I/opt/homebrew/include" >> $GITHUB_ENV
-          echo "LDFLAGS=-L/opt/homebrew/lib" >> $GITHUB_ENV
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
