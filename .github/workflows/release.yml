@@ -3,7 +3,7 @@ name: Build and Release WENDy R package
 on:
   push:
     tags:
-      - 'v*'         
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -19,16 +19,32 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            cmake g++ libeigen3-dev libfftw3-dev libsymengine-dev \
+            cmake g++ libeigen3-dev libfftw3-dev \
             libflint-dev libgmp-dev libmpfr-dev libfmt-dev \
-            coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev
-          # Ceres is not in Ubuntu repos, so build from source:
-          sudo apt-get install -y libgoogle-glog-dev libgflags-dev
+            coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev \
+            libgoogle-glog-dev libgflags-dev
+
+      - name: Build SymEngine from source (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          git clone https://github.com/symengine/symengine.git
+          cd symengine
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON
+          make -j2
+          sudo make install
+          cd ../..
+          rm -rf symengine
+
+      - name: Build Ceres from source (Linux)
+        if: runner.os == 'Linux'
+        run: |
           git clone https://github.com/ceres-solver/ceres-solver.git
           cd ceres-solver
           mkdir build && cd build
@@ -55,9 +71,7 @@ jobs:
           cd src/core
           mkdir -p build
           cd build
-          cmake -DCMAKE_BUILD_TYPE=Release \
-                -DEigen3_DIR=$(Rscript -e 'cat(system("Rscript -e \"cat(system.file(package = \\\"RcppEigen\\\"))\"", intern = TRUE))') \
-                ..
+          cmake -DCMAKE_BUILD_TYPE=Release ..
           cmake --build . --target wendy
           cd ../../../
 
@@ -99,3 +113,4 @@ jobs:
             artifacts/wendy-tarball-macos-latest/wendy_*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
