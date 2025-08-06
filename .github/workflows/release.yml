@@ -64,14 +64,25 @@ jobs:
             coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev \
             libgoogle-glog-dev libgflags-dev libomp-dev libceres-dev
           sudo apt-get install r-cran-rcpp r-cran-devtools
-          pip install conan
-          conan profile detect --force
-          conan install \
-            --requires=symengine/0.14.0 \
-            --build=missing \
-            --generator=CMakeToolchain \
-            --generator=CMakeDeps
-          
+
+ 
+      - name: Build and install SymEngine (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          git clone --branch v0.11.1 https://github.com/symengine/symengine.git
+          cd symengine
+          mkdir build && cd build
+          cmake .. \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=ON \
+            -DWITH_SYMENGINE_RCP=ON \
+            -DWITH_MPC=ON \
+            -DWITH_FLINT=ON \
+            -DCMAKE_INSTALL_PREFIX=/usr/local
+            make -j2 
+            sudo make install 
+            cd ../..  
+            rm -rf symengine          
 
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
@@ -98,7 +109,6 @@ jobs:
           export CXX=/opt/homebrew/opt/llvm/bin/clang++
           export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -Wl,-rpath,/opt/homebrew/opt/llvm/lib"
           export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
-
           cmake -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -DCMAKE_C_COMPILER=$CC \
@@ -111,14 +121,14 @@ jobs:
             -DOpenMP_omp_LIBRARY="/opt/homebrew/opt/libomp/lib/libomp.dylib" \
             ..
           else
-            # Linux configuration
-          cmake .. \
-            -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake \
+            cmake .. \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="/usr/local" \
             -DCMAKE_CXX_STANDARD=17 \
             -DCMAKE_CXX_STANDARD_REQUIRED=ON \
-            -DCMAKE_INCLUDE_SYSTEM_FLAG_CXX=-isystem
-            -DCMAKE_VERBOSE_MAKEFILE=ON
-          fi
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -G "Unix Makefiles"
+          fi       
           
           cmake --build . --target wendy
           cd ../../../
