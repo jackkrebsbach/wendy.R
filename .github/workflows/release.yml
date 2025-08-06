@@ -62,7 +62,7 @@ jobs:
             python3-pip cmake g++ libeigen3-dev libfftw3-dev \
             libflint-dev libgmp-dev libmpfr-dev libfmt-dev \
             coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev \
-            libgoogle-glog-dev libgflags-dev libomp-dev libceres-dev
+            libgoogle-glog-dev libgflags-dev libomp-dev libceres-dev libmpc-dev
           sudo apt-get install r-cran-rcpp r-cran-devtools
 
  
