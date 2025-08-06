@@ -69,6 +69,18 @@ jobs:
           sudo make install
           cd ../..
           rm -rf symengine
+          
+      - name: Build Abseil from source (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          git clone https://github.com/abseil/abseil-cpp.git
+          cd abseil-cpp
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+          make -j2
+          sudo make install
+          cd ../..
+          rm -rf abseil-cpp
 
       - name: Build Ceres from source (Linux)
         if: runner.os == 'Linux'
