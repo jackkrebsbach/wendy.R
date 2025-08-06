@@ -7,7 +7,7 @@ logistic <- function(u, p, t) {
     list(p[[1]] * u[[1]] - p[[2]] * u[[1]]^2)
 }
 
-noise_sd <- 0.25
+noise_sd <- 0.05
 p_star <- c(1, 1)
 u0 <- c(0.01)
 p0 <- c(0.5, 0.5)

@@ -14,9 +14,16 @@ PKG_CXXFLAGS = \
   -I/opt/homebrew/include/Eigen3 \
   -I/opt/homebrew/Caskroom/miniforge/base/include
 
+
+# PKG_LIBS = \
+#   $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
+#   $(PWD)/core/build/libwendy.a \
+#   -L/opt/homebrew/lib \
+#   -L/opt/homebrew/Caskroom/miniforge/base/ \
+#   -lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3 -lipopt
+
 PKG_LIBS = \
   $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
-  $(PWD)/core/cmake-build-debug/libwendy.a \
-  -L/opt/homebrew/lib \
-  -L/opt/homebrew/Caskroom/miniforge/base/ \
-  -lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3 -lceres -lipopt
+  $(PWD)/core/build/libwendy.a \
+  /opt/homebrew/lib/libfftw3.a \
+  -lipopt -lsymengine
