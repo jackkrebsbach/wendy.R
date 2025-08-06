@@ -77,8 +77,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DBUILD_SHARED_LIBS=ON \
             -DWITH_SYMENGINE_RCP=ON \
-            -DWITH_MPC=ON \
-            -DWITH_FLINT=ON \
+            -DWITH_MPC=OFF \
+            -DWITH_FLINT=OFF \
             -DCMAKE_INSTALL_PREFIX=/usr/local
             make -j2 
             sudo make install 
