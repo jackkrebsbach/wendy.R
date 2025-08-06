@@ -119,16 +119,16 @@ jobs:
           if [[ "$RUNNER_OS" == "macOS" ]]; then
             # macOS-specific CMake configuration
             cmake -DCMAKE_BUILD_TYPE=Release \
-                  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-                  -DCMAKE_PREFIX_PATH="/opt/homebrew" \
-                  -DOpenMP_ROOT="/opt/homebrew" \
-                  -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp" \
-                  -DOpenMP_CXX_LIB_NAMES="omp" \
-                  -DOpenMP_omp_LIBRARY="/opt/homebrew/lib/libomp.dylib" \
-                  -DCMAKE_CXX_FLAGS="-I/opt/homebrew/include -I/usr/local/include -Xpreprocessor -fopenmp"
-                  -DCMAKE_EXE_LINKER_FLAGS="-L/opt/homebrew/lib" \
-                  -DCMAKE_INCLUDE_PATH="/opt/homebrew/include"  \
-                  ..
+              -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+              -DCMAKE_PREFIX_PATH="/opt/homebrew" \
+              -DOpenMP_ROOT="/opt/homebrew" \
+              -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp" \
+              -DOpenMP_CXX_LIB_NAMES="omp" \
+              -DOpenMP_omp_LIBRARY="/opt/homebrew/lib/libomp.dylib" \
+              -DCMAKE_CXX_FLAGS="-I/opt/homebrew/include -Xpreprocessor -fopenmp" \
+              -DCMAKE_EXE_LINKER_FLAGS="-L/opt/homebrew/lib -lomp" \
+              -DCMAKE_INCLUDE_PATH="/opt/homebrew/include" \
+              ..
           else
             # Linux configuration
             cmake -DCMAKE_BUILD_TYPE=Release \

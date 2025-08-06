@@ -16,7 +16,7 @@ PKG_CXXFLAGS = \
   -DNDEBUG \
   -I$(PWD)/core/include
 
-# Platform-specific include flags
+# Platform-specific include flags and OpenMP
 ifeq ($(UNAME_S),Darwin)
   # macOS (ARM and Intel)
   PKG_CXXFLAGS += \
@@ -24,19 +24,9 @@ ifeq ($(UNAME_S),Darwin)
     -I/opt/homebrew/include/eigen3 \
     -I/usr/local/include \
     -I/usr/local/include/eigen3 \
-    -I/opt/homebrew/Caskroom/miniforge/base/include
-else ifeq ($(UNAME_S),Linux)
-  # Linux (system and Homebrew on Linux)
-  PKG_CXXFLAGS += \
-    -I/usr/include \
-    -I/usr/include/eigen3 \
-    -I/usr/local/include \
-    -I/home/linuxbrew/.linuxbrew/include \
-    -I/home/linuxbrew/.linuxbrew/include/eigen3
-endif
+    -I/opt/homebrew/Caskroom/miniforge/base/include \
+    -Xpreprocessor -fopenmp
 
-# Platform-specific library flags
-ifeq ($(UNAME_S),Darwin)
   PKG_LIBS = \
     $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
     $(PWD)/core/build/libwendy.a \
@@ -44,13 +34,25 @@ ifeq ($(UNAME_S),Darwin)
     /usr/local/lib/libfftw3.a \
     -L/opt/homebrew/lib \
     -L/usr/local/lib \
-    -lipopt -lsymengine -lflint -lgmp -lmpfr -lfmt
+    -lipopt -lsymengine -lflint -lgmp -lmpfr -lfmt \
+    -lomp
+
 else ifeq ($(UNAME_S),Linux)
+  # Linux (system and Homebrew on Linux)
+  PKG_CXXFLAGS += \
+    -I/usr/include \
+    -I/usr/include/eigen3 \
+    -I/usr/local/include \
+    -I/home/linuxbrew/.linuxbrew/include \
+    -I/home/linuxbrew/.linuxbrew/include/eigen3 \
+    -fopenmp
+
   PKG_LIBS = \
     $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
     $(PWD)/core/build/libwendy.a \
     -L/usr/lib \
     -L/usr/local/lib \
     -L/home/linuxbrew/.linuxbrew/lib \
-    -lfftw3 -lipopt -lsymengine -lflint -lgmp -lmpfr -lfmt
+    -lfftw3 -lipopt -lsymengine -lflint -lgmp -lmpfr -lfmt \
+    -fopenmp
 endif
