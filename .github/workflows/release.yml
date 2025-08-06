@@ -124,6 +124,7 @@ jobs:
           else
             cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
+            -DSymEngine_DIR=/usr/local/lib/cmake/symengine \
             -DCMAKE_PREFIX_PATH="/usr/local" \
             -DCMAKE_CXX_STANDARD=17 \
             -DCMAKE_CXX_STANDARD_REQUIRED=ON \
