@@ -75,10 +75,12 @@ jobs:
         run: |
           git clone https://github.com/abseil/abseil-cpp.git
           cd abseil-cpp
+          ABSEIL_VERSION=$(grep -Po '(?<=set\(ABSL_VERSION ")[^"]+' CMakeLists.txt | head -1)
           mkdir build && cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
           make -j2
           sudo make install
+          echo "ABSEIL_VERSION=$ABSEIL_VERSION" >> $GITHUB_ENV
           cd ../..
           rm -rf abseil-cpp
 
@@ -88,7 +90,7 @@ jobs:
           git clone https://github.com/ceres-solver/ceres-solver.git
           cd ceres-solver
           mkdir build && cd build
-          cmake .. -DBUILD_TESTING=OFF
+          cmake .. -DBUILD_TESTING=OFF -Dabsl_VERSION="${ABSEIL_VERSION}"
           make -j2
           sudo make install
           cd ../..
