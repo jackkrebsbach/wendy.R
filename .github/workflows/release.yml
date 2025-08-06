@@ -130,7 +130,6 @@ jobs:
             export CMAKE_PREFIX_PATH="/usr/local/lib/cmake/symengine:$CMAKE_PREFIX_PATH"
             cmake -DCMAKE_BUILD_TYPE=Release \
                   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-                  -DCMAKE_PREFIX_PATH="/usr/local" \
                   ..
           fi
           
