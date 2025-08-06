@@ -22,7 +22,7 @@ jobs:
       - name: Install xtl, xtensor, and xtensor-blas (Linux and macOS)
         run: |
           # Install xtl
-          git clone --branch 0.7.5 https://github.com/xtensor-stack/xtl.git
+          git clone --branch 0.8.0 https://github.com/xtensor-stack/xtl.git
           cd xtl
           mkdir build && cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release
