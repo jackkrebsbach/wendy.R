@@ -19,6 +19,34 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+      - name: Install xtl, xtensor, and xtensor-blas (Linux and macOS)
+        run: |
+          # Install xtl
+          git clone --branch 0.7.5 https://github.com/xtensor-stack/xtl.git
+          cd xtl
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          sudo make install
+          cd ../..
+          rm -rf xtl
+
+          # Install xtensor
+          git clone --branch 0.24.6 https://github.com/xtensor-stack/xtensor.git
+          cd xtensor
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          sudo make install
+          cd ../..
+          rm -rf xtensor
+
+          # Install xtensor-blas
+          git clone --branch 0.20.0 https://github.com/xtensor-stack/xtensor-blas.git
+          cd xtensor-blas
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          sudo make install
+          cd ../..
+          rm -rf xtensor-blas
 
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
@@ -28,7 +56,7 @@ jobs:
             cmake g++ libeigen3-dev libfftw3-dev \
             libflint-dev libgmp-dev libmpfr-dev libfmt-dev \
             coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev \
-            libgoogle-glog-dev libgflags-dev
+            libgoogle-glog-dev libgflags-dev libomp-dev
 
       - name: Build SymEngine from source (Linux)
         if: runner.os == 'Linux'
@@ -57,7 +85,23 @@ jobs:
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install cmake eigen ceres-solver fftw symengine flint gmp mpfr fmt ipopt pkg-config
+          brew install cmake eigen ceres-solver fftw symengine flint gmp mpfr fmt ipopt pkg-config libomp
+
+      - name: Set up OpenMP environment (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          # Set OpenMP environment variables for macOS
+          echo "OpenMP_ROOT=/opt/homebrew" >> $GITHUB_ENV
+          echo "OpenMP_CXX_FLAGS=-Xpreprocessor -fopenmp" >> $GITHUB_ENV
+          echo "OpenMP_CXX_LIB_NAMES=omp" >> $GITHUB_ENV
+          echo "OpenMP_omp_LIBRARY=/opt/homebrew/lib/libomp.dylib" >> $GITHUB_ENV
+          
+          # Add to CMAKE_PREFIX_PATH
+          echo "CMAKE_PREFIX_PATH=/opt/homebrew:$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+          
+          # Set compiler flags
+          echo "CPPFLAGS=-I/opt/homebrew/include" >> $GITHUB_ENV
+          echo "LDFLAGS=-L/opt/homebrew/lib" >> $GITHUB_ENV
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
@@ -71,7 +115,27 @@ jobs:
           cd src/core
           mkdir -p build
           cd build
-          cmake -DCMAKE_BUILD_TYPE=Release ..
+          
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            # macOS-specific CMake configuration
+            cmake -DCMAKE_BUILD_TYPE=Release \
+                  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+                  -DCMAKE_PREFIX_PATH="/opt/homebrew" \
+                  -DOpenMP_ROOT="/opt/homebrew" \
+                  -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp" \
+                  -DOpenMP_CXX_LIB_NAMES="omp" \
+                  -DOpenMP_omp_LIBRARY="/opt/homebrew/lib/libomp.dylib" \
+                  -DCMAKE_CXX_FLAGS="-I/opt/homebrew/include" \
+                  -DCMAKE_EXE_LINKER_FLAGS="-L/opt/homebrew/lib" \
+                  -DCMAKE_INCLUDE_PATH="/opt/homebrew/include"  \
+                  ..
+          else
+            # Linux configuration
+            cmake -DCMAKE_BUILD_TYPE=Release \
+                  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+                  ..
+          fi
+          
           cmake --build . --target wendy
           cd ../../../
 
@@ -113,4 +177,3 @@ jobs:
             artifacts/wendy-tarball-macos-latest/wendy_*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
