@@ -95,6 +95,8 @@ jobs:
           sudo make install
           cd ../..
           rm -rf ceres-solver
+        env:
+          ABSEIL_VERSION: ${{ env.ABSEIL_VERSION }}
 
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
