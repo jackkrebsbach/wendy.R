@@ -16,7 +16,7 @@ PKG_CXXFLAGS = \
 
 PKG_LIBS = \
   $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
-  $(PWD)/core/lib/libwendy.a \
+  $(PWD)/core/cmake-build-debug/libwendy.a \
   -L/opt/homebrew/lib \
   -L/opt/homebrew/Caskroom/miniforge/base/ \
-  -lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3 -lceres
+  -lsymengine -lflint -lgmp -lmpfr -lfmt -lfftw3 -lceres -lipopt

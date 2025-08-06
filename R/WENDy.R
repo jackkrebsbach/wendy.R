@@ -37,8 +37,7 @@ WendySolver <- function(
   p <- lapply(1:length(p0), function(i) symengine::S(paste0("p", i)))
   t <- symengine::S("t")
 
-  du <- f(u, p, t) |>
-    vapply(as.character, character(1))
+  du <- vapply(f(u, p, t), as.character, character(1))
 
   data <- SolveWendyProblem(
     du,
