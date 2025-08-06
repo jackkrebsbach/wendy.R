@@ -20,8 +20,6 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DCeres_DIR=/opt/homebrew/Cellar/ceres-solver/2.2.0_1.reinstall/lib/cmake/Ceres \
       ..
 
-echo "==> Current directory: $(pwd)"
-
 cmake --build . --target wendy
 
 cd ../../..
