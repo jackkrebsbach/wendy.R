@@ -1,7 +1,5 @@
-name: Build and Release R Package
+name: Build and Release WENDy R package
 
-on:
-  workflow_dispatch:
 on:
   push:
     tags:
