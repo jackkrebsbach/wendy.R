@@ -73,8 +73,8 @@ jobs:
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
             cache: true
-            use-pak: true
             packages: Rcpp, RcppEigen, devtools
+            extra-packages: pak
             
       - name: Build core C++ library
         run: |
