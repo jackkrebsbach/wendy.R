@@ -159,15 +159,16 @@ jobs:
       - name: Build R package
         run: R CMD build .
 
+      - name: Rename tarball with OS suffix
+        run: |
+          TARFILE=$(ls wendy_*.tar.gz)
+          mv "$TARFILE" "wendy_${{ runner.os }}.tar.gz"
+
       - name: Upload R package tarball
         uses: actions/upload-artifact@v4
         with:
-          name: wendy-tarball-${{ runner.os }}
-          path: wendy_*.tar.gz
-
-      - name: Save tarball path for release
-        id: tarball
-        run: echo "TARBALL_PATH=$(ls wendy_*.tar.gz)" >> $GITHUB_ENV
+            name: wendy-tarball-${{ runner.os }}
+            path: wendy_${{ runner.os }}.tar.gz
 
   release:
     name: Attach tarballs to GitHub Release
