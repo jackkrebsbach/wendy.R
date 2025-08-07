@@ -1,5 +1,4 @@
 name: Build and Release WENDy R package
-
 on:
   push:
     tags:
