@@ -1,58 +1,36 @@
-# src/Makevars
-
 UNAME_S := $(shell uname -s)
+R_HOME ?= $(shell R RHOME)
 
-CXX_STD = CXX20
-
-# Common flags
 PKG_CXXFLAGS = \
   $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::CxxFlags()") \
-  -O3 \
-  -march=native \
-  -ffast-math \
-  -funroll-loops \
-  -flto \
-  -fstrict-aliasing \
-  -DNDEBUG \
   -I$(PWD)/core/include
 
-# Platform-specific include flags and OpenMP
 ifeq ($(UNAME_S),Darwin)
-  # macOS (ARM and Intel)
+  # Homebrew on macOS (M1/Intel)
   PKG_CXXFLAGS += \
     -I/opt/homebrew/include \
-    -I/opt/homebrew/include/eigen3 \
-    -I/usr/local/include \
-    -I/usr/local/include/eigen3 \
-    -I/opt/homebrew/Caskroom/miniforge/base/include \
-    -Xpreprocessor -fopenmp
+    -I/usr/local/include
 
   PKG_LIBS = \
     $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
     $(PWD)/core/build/libwendy.a \
-    /opt/homebrew/lib/libfftw3.a \
-    /usr/local/lib/libfftw3.a \
-    -L/opt/homebrew/lib \
-    -L/usr/local/lib \
-    -lipopt -lsymengine -lflint -lgmp -lmpfr -lfmt \
+    $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
+    $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
+    $(shell "${R_HOME}/bin/R" CMD config FLIBS) \
     -lomp
 
 else ifeq ($(UNAME_S),Linux)
-  # Linux (system and Homebrew on Linux)
+  # System paths and Linuxbrew
   PKG_CXXFLAGS += \
     -I/usr/include \
-    -I/usr/include/eigen3 \
     -I/usr/local/include \
-    -I/home/linuxbrew/.linuxbrew/include \
-    -I/home/linuxbrew/.linuxbrew/include/eigen3 \
-    -fopenmp
+    -I/home/linuxbrew/.linuxbrew/include
 
   PKG_LIBS = \
     $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
     $(PWD)/core/build/libwendy.a \
-    -L/usr/lib \
-    -L/usr/local/lib \
-    -L/home/linuxbrew/.linuxbrew/lib \
-    -lfftw3 -lipopt -lsymengine -lflint -lgmp -lmpfr -lfmt \
+    $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
+    $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
+    $(shell "${R_HOME}/bin/R" CMD config FLIBS) \
     -fopenmp
 endif

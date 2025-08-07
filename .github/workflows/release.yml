@@ -84,7 +84,6 @@ jobs:
           cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=/usr/local \
-            -DBUILD_SHARED_LIBS=ON \
             -DLLVM_DIR=$(llvm-config --cmakedir) \
             -DWITH_LLVM=ON 
             make -j2 
