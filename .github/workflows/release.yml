@@ -40,7 +40,7 @@ jobs:
             libgmp-dev libfmt-dev \
             coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev \
             libgoogle-glog-dev libgflags-dev libomp-dev libceres-dev libmpc-dev \
-            llvm clang libarb-dev r-cran-rcpp r-cran-devtools
+            llvm clang libarb-dev 
  
       - name: Install xtl, xtensor, and xtensor-blas (Linux and macOS)
         run: |
@@ -107,7 +107,6 @@ jobs:
         
       - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
-        if: runner.os == 'macOS'
         with:
             cache: true
             packages: Rcpp, devtools
