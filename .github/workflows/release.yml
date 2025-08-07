@@ -60,12 +60,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             python3-pip cmake g++ libeigen3-dev libfftw3-dev \
-            libgmp-dev libmpfr-dev libfmt-dev \
+            libgmp-dev libfmt-dev \
             coinor-libipopt-dev pkg-config libopenblas-dev liblapack-dev \
-            libgoogle-glog-dev libgflags-dev libomp-dev libceres-dev libmpc-dev
-          sudo apt-get install r-cran-rcpp r-cran-devtools
-          sudo apt-get install -y libflint-dev libarb-dev
-
+            libgoogle-glog-dev libgflags-dev libomp-dev libceres-dev libmpc-dev \
+            llvm clang libarb-dev r-cran-rcpp r-cran-devtools
  
       - name: Build and install SymEngine (Linux)
         if: runner.os == 'Linux'
@@ -75,11 +73,27 @@ jobs:
           mkdir build && cd build
           cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr/local \
             -DBUILD_SHARED_LIBS=ON \
-            -DWITH_SYMENGINE_RCP=ON \
-            -DWITH_MPC=OFF \
-            -DWITH_FLINT=OFF \
+            -DLLVM_DIR=$(llvm-config --cmakedir) \
+            -DWITH_LLVM=ON \
+            make -j2 
+            sudo make install 
+            cd ../..  
+            rm -rf symengine          
+
+      - name: Build and install SymEngine (Mac)
+        if: runner.os == 'macOS'
+        run: |
+          git clone --branch v0.11.1 https://github.com/symengine/symengine.git
+          cd symengine
+          mkdir build && cd build
+          cmake .. \
+            -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=/usr/local
+            -DLLVM_DIR=$(brew --prefix llvm)/lib/cmake/llvm \
+            -DLLVM_DIR=$(llvm-config --cmakedir) \
+            -DWITH_LLVM=ON \
             make -j2 
             sudo make install 
             cd ../..  
@@ -88,7 +102,7 @@ jobs:
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install cmake eigen ceres-solver fftw symengine flint gmp mpfr fmt ipopt pkg-config libomp
+          brew install cmake eigen ceres-solver fftw gmp fmt ipopt pkg-config llvm
         
       - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
@@ -106,15 +120,16 @@ jobs:
           
           if [[ "$RUNNER_OS" == "macOS" ]]; then
           # Use Homebrew LLVM for OpenMP support
-          export CC=/opt/homebrew/opt/llvm/bin/clang
+           
           export CXX=/opt/homebrew/opt/llvm/bin/clang++
           export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -Wl,-rpath,/opt/homebrew/opt/llvm/lib"
           export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+
           cmake -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+            -DCMAKE_PREFIX_PATH="/usr/local;/opt/homebrew" \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_C_COMPILER=$CC \
             -DCMAKE_CXX_COMPILER=$CXX \
-            -DCMAKE_PREFIX_PATH="/opt/homebrew" \
             -DCMAKE_CXX_FLAGS="-Xpreprocessor -fopenmp -I/opt/homebrew/include" \
             -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp" \
             -DOpenMP_CXX_LIB_NAMES="omp" \
@@ -124,12 +139,10 @@ jobs:
           else
             cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
-            -DSymEngine_DIR=/usr/local/lib/cmake/symengine \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_PREFIX_PATH="/usr/local" \
             -DCMAKE_CXX_STANDARD=17 \
             -DCMAKE_CXX_STANDARD_REQUIRED=ON \
-            -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -G "Unix Makefiles"
           fi       
           
           cmake --build . --target wendy
