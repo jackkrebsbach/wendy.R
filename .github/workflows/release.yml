@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+      inputs:
+        tag:
+          description: 'Git tag to build'
+          required: false
+          default: ''
 
 jobs:
   build:
@@ -181,8 +186,6 @@ jobs:
       - name: Create release and upload assets
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            artifacts/wendy-tarball-ubuntu-latest/wendy_*.tar.gz
-            artifacts/wendy-tarball-macos-latest/wendy_*.tar.gz
+          files: artifacts/wendy-tarball-*/wendy_*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
