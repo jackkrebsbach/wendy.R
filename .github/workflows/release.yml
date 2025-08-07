@@ -76,14 +76,16 @@ jobs:
         run: |
           git clone --branch v0.11.1 https://github.com/symengine/symengine.git
           cd symengine
+
+          sed -i 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5...3.28)/' CMakeLists.txt
+
           mkdir build && cd build
           cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=/usr/local \
             -DBUILD_SHARED_LIBS=ON \
             -DLLVM_DIR=$(llvm-config --cmakedir) \
-            -DWITH_LLVM=ON \
-            -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+            -DWITH_LLVM=ON 
             make -j2 
             sudo make install 
             cd ../..  
@@ -94,13 +96,16 @@ jobs:
         run: |
           git clone --branch v0.11.1 https://github.com/symengine/symengine.git
           cd symengine
+
+          # Patch CMakeLists.txt
+          sed -i.bak 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5...3.28)/' CMakeLists.txt
+
           mkdir build && cd build
           cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=/usr/local
             -DLLVM_DIR=$(brew --prefix llvm)/lib/cmake/llvm \
-            -DWITH_LLVM=ON \
-            -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+            -DWITH_LLVM=ON 
             make -j2 
             sudo make install 
             cd ../..  
