@@ -74,11 +74,8 @@ jobs:
       - name: Build and install SymEngine (Linux)
         if: runner.os == 'Linux'
         run: |
-          git clone --branch v0.11.1 https://github.com/symengine/symengine.git
+          git clone --branch v0.14.0 https://github.com/symengine/symengine.git
           cd symengine
-
-          sed -i 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5...3.28)/' CMakeLists.txt
-
           mkdir build && cd build
           cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
@@ -94,16 +91,12 @@ jobs:
       - name: Build and install SymEngine (Mac)
         if: runner.os == 'macOS'
         run: |
-          git clone --branch v0.11.1 https://github.com/symengine/symengine.git
+          git clone --branch v0.14.0 https://github.com/symengine/symengine.git
           cd symengine
-
-          # Patch CMakeLists.txt
-          sed -i.bak 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5...3.28)/' CMakeLists.txt
-
           mkdir build && cd build
           cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/usr/local
+            -DCMAKE_INSTALL_PREFIX=/usr/local \
             -DLLVM_DIR=$(brew --prefix llvm)/lib/cmake/llvm \
             -DWITH_LLVM=ON 
             make -j2 
