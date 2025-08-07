@@ -18,6 +18,5 @@
 ^.*\.tar\.gz$
 ^examples/
 src/core/.idea
-^src/core/cmake-build-debug/(?!libwendy\.a$).*
 src/core/test
 src/core/example.sh
