@@ -92,7 +92,6 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=/usr/local
             -DLLVM_DIR=$(brew --prefix llvm)/lib/cmake/llvm \
-            -DLLVM_DIR=$(llvm-config --cmakedir) \
             -DWITH_LLVM=ON \
             make -j2 
             sudo make install 
