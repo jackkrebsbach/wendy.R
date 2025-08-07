@@ -83,6 +83,7 @@ jobs:
             -DBUILD_SHARED_LIBS=ON \
             -DLLVM_DIR=$(llvm-config --cmakedir) \
             -DWITH_LLVM=ON \
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5
             make -j2 
             sudo make install 
             cd ../..  
@@ -99,6 +100,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=/usr/local
             -DLLVM_DIR=$(brew --prefix llvm)/lib/cmake/llvm \
             -DWITH_LLVM=ON \
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5
             make -j2 
             sudo make install 
             cd ../..  
