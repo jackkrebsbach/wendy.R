@@ -1,4 +1,4 @@
-/build/
+**/build/
 /.venv
 *.DS_Store
 *.o
@@ -7,3 +7,4 @@
 !pkg/test/Makefile
 .idea
 cmake-build-debug
+*.vscode
