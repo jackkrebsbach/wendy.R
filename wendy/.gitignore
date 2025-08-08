@@ -1,0 +1,9 @@
+/build/
+/.venv
+*.DS_Store
+*.o
+*.tmp
+!pkg/test/*.*
+!pkg/test/Makefile
+.idea
+cmake-build-debug
