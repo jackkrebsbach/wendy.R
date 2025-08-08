@@ -11,6 +11,8 @@
 #include <IpIpoptApplication.hpp>
 #include <xtensor/containers/xarray.hpp>
 #include <xtensor/views/xview.hpp>
+#include <xtensor/views/xindex_view.hpp>
+#include <xtensor/core/xmath.hpp>
 #include <xtensor-blas/xlinalg.hpp>
 #include <iostream>
 #include <vector>

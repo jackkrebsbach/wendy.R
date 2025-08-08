@@ -1,10 +1,11 @@
 #include <wendy/wnll.h>
 #include "../utils.h"
-#include <numbers>
 #include <xtensor/containers/xadapt.hpp>
 #include <xtensor/views/xview.hpp>
 #include <xtensor/containers/xtensor.hpp>
 #include <xtensor-blas/xlinalg.hpp>
+
+constexpr double pi = 3.14159265358979323846;
 
 WNLL::WNLL(
     const xt::xtensor<double, 2> &U_,
@@ -22,7 +23,7 @@ WNLL::WNLL(
    Ju_f(Ju_f_), Jp_f(Jp_f_), Hp_f(Hp_f_),
    K(V_.shape()[0]), mp1(U.shape()[0]), D(U.shape()[1]) {
     J = Jp_f.dx[0].size();
-    constant_term = 0.5 * K * D * std::log(2 * std::numbers::pi);
+    constant_term = 0.5 * K * D * std::log(2 * pi);
 }
 
 

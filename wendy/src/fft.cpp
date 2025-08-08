@@ -1,7 +1,6 @@
 #include "fft.h"
 #include <xtensor/containers/xarray.hpp>
 #include <xtensor/views/xview.hpp>
-#include <xtensor/core/xmath.hpp>
 #include <fftw3.h>
 #include <vector>
 #include <complex>

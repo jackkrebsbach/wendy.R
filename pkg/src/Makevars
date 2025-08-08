@@ -1,36 +1,12 @@
+CXX_STD = CXX20
 UNAME_S := $(shell uname -s)
 R_HOME ?= $(shell R RHOME)
 
-PKG_CXXFLAGS = \
-  $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::CxxFlags()") \
-  -I$(PWD)/core/include
+PKG_CPPFLAGS = -I../inst/include
 
-ifeq ($(UNAME_S),Darwin)
-  # Homebrew on macOS (M1/Intel)
-  PKG_CXXFLAGS += \
-    -I/opt/homebrew/include \
-    -I/usr/local/include
-
-  PKG_LIBS = \
-    $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
-    $(PWD)/core/build/libwendy.a \
-    $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
-    $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
-    $(shell "${R_HOME}/bin/R" CMD config FLIBS) \
-    -lomp
-
-else ifeq ($(UNAME_S),Linux)
-  # System paths and Linuxbrew
-  PKG_CXXFLAGS += \
-    -I/usr/include \
-    -I/usr/local/include \
-    -I/home/linuxbrew/.linuxbrew/include
-
-  PKG_LIBS = \
-    $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
-    $(PWD)/core/build/libwendy.a \
-    $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
-    $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
-    $(shell "${R_HOME}/bin/R" CMD config FLIBS) \
-    -fopenmp
-endif
+PKG_LIBS = \
+  $(shell "${R_HOME}/bin/Rscript" -e "Rcpp:::LdFlags()") \
+  ../../../build/libwendy.a \
+  $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
+  $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
+  $(shell "${R_HOME}/bin/R" CMD config FLIBS)

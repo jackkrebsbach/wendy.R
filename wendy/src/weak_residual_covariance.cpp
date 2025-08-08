@@ -1,4 +1,3 @@
-#include "utils.h"
 #include <wendy/weak_residual_covariance.h>
 #include <xtensor/containers/xtensor.hpp>
 #include <xtensor/views/xview.hpp>

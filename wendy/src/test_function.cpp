@@ -2,13 +2,11 @@
 #include "fft.h"
 #include "utils.h"
 #include <xtensor/views/xview.hpp>
-#include <xtensor/reducers/xnorm.hpp>
-#include <xtensor/misc/xcomplex.hpp>
+#include <xtensor/core/xmath.hpp>
 #include <xtensor/core/xvectorize.hpp>
 #include <xtensor/containers/xarray.hpp>
 #include <xtensor-blas/xlinalg.hpp>
 #include <symengine/expression.h>
-#include <xtensor/core/xmath.hpp>
 #include <symengine/lambda_double.h>
 
 using namespace xt;
@@ -103,7 +101,7 @@ xt::xarray<double> build_test_function_matrix(const xtensor<double, 1> &tt, int 
 
     auto v_row = xt::eval(phi_vec(xx));
 
-    v_row /= xt::norm_l2(xt::vectorize([](const double t){return (phi(t, 9));})(xx))();
+    v_row /= xt::norm(xt::vectorize([](const double t){return (phi(t, 9));})(xx))();
 
     // Add back in zero on the endpoints
     xt::xtensor<double, 1> v_row_padded = xt::zeros<double>({v_row.size() + 2});
@@ -159,7 +157,7 @@ std::tuple<int, xt::xarray<double>, xt::xtensor<int, 1>> find_min_radius_int_err
         //Fast Fourier Transform
         auto f_hat_G = calculate_fft(GT_reshaped);
         auto f_hat_G_imag = xt::eval(xt::imag(xt::col(f_hat_G, IX)));
-        errors[i] = xt::norm_l2(f_hat_G_imag)();
+        errors[i] = xt::norm(f_hat_G_imag)();
     }
 
     const xtensor<double, 1> radii_dbl = xt::cast<double>(radii);

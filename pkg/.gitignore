@@ -8,3 +8,4 @@
 .idea
 .vscode
 *.tar.gz
+inst/include/*

@@ -7,8 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(PkgConfig REQUIRED)
 find_package(BLAS REQUIRED)
 find_package(LAPACK REQUIRED)
-find_package(xtensor REQUIRED)
-find_package(xtensor-blas REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Ceres REQUIRED)
 
@@ -32,16 +30,21 @@ file(GLOB_RECURSE WENDY_HEADERS include/wendy/*.h)
 
 add_library(wendy STATIC ${WENDY_SOURCES} ${WENDY_HEADERS})
 
-target_include_directories(wendy PUBLIC
+target_include_directories(wendy BEFORE PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/xtl/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/xtensor/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../external/xtensor-blas/include
         ${CMAKE_CURRENT_SOURCE_DIR}/include/wendy
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${SYMENGINE_INCLUDE_DIR}
         ${IPOPT_INCLUDE_DIRS}
 )
 
+get_target_property(WENDY_INCLUDES wendy INCLUDE_DIRECTORIES)
+list(FILTER WENDY_INCLUDES EXCLUDE REGEX ".*/opt/homebrew/include.*")
+set_target_properties(wendy PROPERTIES INCLUDE_DIRECTORIES "${WENDY_INCLUDES}")
+
 target_link_libraries(wendy PUBLIC
-        xtensor
-        xtensor-blas
         Eigen3::Eigen
         Ceres::ceres
         PkgConfig::IPOPT
@@ -63,7 +66,7 @@ target_compile_options(wendy PRIVATE
         -DNDEBUG
 )
 
-option(BUILD_EXAMPLES "Build example programs" ON)
+option(BUILD_EXAMPLES "Build example programs" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 
 if(BUILD_EXAMPLES)

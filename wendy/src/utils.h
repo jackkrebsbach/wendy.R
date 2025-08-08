@@ -2,7 +2,7 @@
 #define UTILS_H
 
 #include <wendy/weak_residual.h>
-#include <xtensor/misc/xsort.hpp>
+#include <xtensor/views/xindex_view.hpp>
 #include <xtensor-blas/xlinalg.hpp>
 #include <symengine/expression.h>
 #include <symengine/lambda_double.h>
