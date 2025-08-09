@@ -1,8 +1,11 @@
 CXX_STD = CXX20
 R_HOME ?= $(shell R RHOME)
 
+SYMENGINE_DIR = $(CURDIR)/src/symengine
+SYMENGINE_LIB = $(SYMENGINE_DIR)/libsymengine.a
+
 CORE_DIR = ./core/src
-PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR)
+PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR) -I$(SYMENGINE_DIR) -I$(SYMENGINE_DIR)/symengine
 
 CORE_SOURCES := $(shell find $(CORE_DIR) -name '*.cpp')
 CORE_OBJECTS := $(patsubst $(CORE_DIR)/%,%,$(CORE_SOURCES:.cpp=.o))
@@ -10,21 +13,29 @@ CORE_OBJECTS := $(patsubst $(CORE_DIR)/%,%,$(CORE_SOURCES:.cpp=.o))
 $(info CORE_DIR = $(CORE_DIR))
 $(info CORE_SOURCES = $(CORE_SOURCES))
 
+SYMENGINE_SOURCES := $(shell find $(SYMENGINE_DIR)/symengine -name '*.cpp')
+SYMENGINE_OBJECTS := $(SYMENGINE_SOURCES:.cpp=.o)
+
 OBJECTS = RcppExports.o main.o $(CORE_OBJECTS)
 
-wendy.so: $(OBJECTS)
-	$(CXX) -std=gnu++20 -shared -o $@ $(OBJECTS) $(PKG_LIBS)
+wendy.so: $(OBJECTS) $(SYMENGINE_LIB)
+	$(CXX) -std=gnu++20 -shared -o $@ $(OBJECTS) $(PKG_LIBS) $(SYMENGINE_LIB)
 
-vpath %.cpp $(sort $(dir $(CORE_SOURCES)))
+vpath %.cpp $(sort $(dir $(CORE_SOURCES)) $(dir $(SYMENGINE_SOURCES)) )
 
 $(CORE_OBJECTS): %.o: %.cpp
 	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
+  
+$(SYMENGINE_OBJECTS): %.o: %.cpp
+	$(CXX) -std=gnu++20 -I$(SYMENGINE_DIR) -I$(SYMENGINE_DIR)/symengine $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
+  
+$(SYMENGINE_LIB): $(SYMENGINE_OBJECTS)
+	$(AR) rcs $@ $^
 
-SYMENGINE_LIBS = $(shell pkg-config --libs --silence-errors symengine || echo "-lsymengine -lmpfr -lgmp -lmpc")
 FFTW_LIBS     = $(shell pkg-config --libs --silence-errors fftw3     || echo "-lfftw3")
 CERES_LIBS    = $(shell pkg-config --libs --silence-errors ceres     || echo "-lceres -lglog -lgflags")
 
-PKG_LIBS = $(SYMENGINE_LIBS) $(FFTW_LIBS) $(CERES_LIBS) \
+PKG_LIBS = $(FFTW_LIBS) $(CERES_LIBS) \
   $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
   $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
   $(shell "${R_HOME}/bin/R" CMD config FLIBS)

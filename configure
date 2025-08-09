@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+
+# Unpack SymEngine source if not already present
+if [ -f src/symengine.tar.gz ] && [ ! -d src/symengine ]; then
+  echo "Extracting SymEngine source from src/symengine.tar.gz..."
+  mkdir -p src/symengine
+  tar -xzf src/symengine.tar.gz -C src/symengine --strip-components=1
+  echo "✅ SymEngine source extracted to src/symengine"
+fi
