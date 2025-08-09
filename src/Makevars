@@ -4,80 +4,18 @@ CONDA_PREFIX ?= $(shell echo $$CONDA_PREFIX)
 
 CORE_DIR = ./core/src
 
-SYMENGINE_CFLAGS = $(shell pkg-config --cflags --silence-errors symengine)
-SYMENGINE_LIBS   = $(shell pkg-config --libs --silence-errors symengine)
-FFTW_LIBS        = $(shell pkg-config --libs --silence-errors fftw3)
-CERES_LIBS       = $(shell pkg-config --libs --silence-errors ceres)
-GLOG_CFLAGS      = $(shell pkg-config --cflags --silence-errors glog)
-GLOG_LIBS        = $(shell pkg-config --libs --silence-errors glog)
-GFLAGS_CFLAGS    = $(shell pkg-config --cflags --silence-errors gflags)
-GFLAGS_LIBS      = $(shell pkg-config --libs --silence-errors gflags)
-
-ifeq ($(SYMENGINE_LIBS),)
-  ifneq ($(CONDA_PREFIX),)
-    SYMENGINE_CFLAGS = -I$(CONDA_PREFIX)/include
-    SYMENGINE_LIBS   = -L$(CONDA_PREFIX)/lib -lsymengine
-  endif
+ifeq ($(strip $(CONDA_PREFIX)),)
+  $(error "Please activate your Conda environment with all dependencies installed via conda-forge before building this package.")
 endif
 
-ifeq ($(FFTW_LIBS),)
-  ifneq ($(CONDA_PREFIX),)
-    FFTW_LIBS = -L$(CONDA_PREFIX)/lib -lfftw3
-  else
-    FFTW_LIBS = -lfftw3
-  endif
-endif
+SYMENGINE_CFLAGS = -I$(CONDA_PREFIX)/include
+SYMENGINE_LIBS   = -L$(CONDA_PREFIX)/lib -lsymengine
+FFTW_LIBS        = -L$(CONDA_PREFIX)/lib -lfftw3
+CERES_CFLAGS     = -I$(CONDA_PREFIX)/include
+CERES_LIBS       = -L$(CONDA_PREFIX)/lib -lceres
+GLOG_LIBS        = -L$(CONDA_PREFIX)/lib -lglog
 
-ifeq ($(CERES_LIBS),)
-  ifneq ($(CONDA_PREFIX),)
-    CERES_LIBS = -L$(CONDA_PREFIX)/lib -lceres
-  else
-    CERES_LIBS = -lceres
-  endif
-endif
-
-ifeq ($(GLOG_LIBS),)
-  ifneq ($(CONDA_PREFIX),)
-    GLOG_CFLAGS = -I$(CONDA_PREFIX)/include
-    GLOG_LIBS   = -L$(CONDA_PREFIX)/lib -lglog
-  else
-    GLOG_CFLAGS =
-    GLOG_LIBS   = -lglog
-  endif
-endif
-
-ifeq ($(GFLAGS_LIBS),)
-  ifneq ($(CONDA_PREFIX),)
-    GFLAGS_CFLAGS = -I$(CONDA_PREFIX)/include
-    GFLAGS_LIBS   = -L$(CONDA_PREFIX)/lib -lgflags
-  else
-    GFLAGS_CFLAGS =
-    GFLAGS_LIBS   = -lgflags
-  endif
-endif
-
-ifeq ($(strip $(SYMENGINE_LIBS)),)
-  $(error "SymEngine library not found. Please install symengine via Homebrew (brew install symengine) or Conda (conda install -c conda-forge symengine) and ensure it is discoverable.")
-endif
-
-ifeq ($(strip $(FFTW_LIBS)),)
-  $(error "FFTW library not found. Please install fftw via Homebrew (brew install fftw) or Conda (conda install -c conda-forge fftw) and ensure it is discoverable.")
-endif
-
-ifeq ($(strip $(CERES_LIBS)),)
-  $(error "Ceres Solver library not found. Please install ceres-solver via Homebrew (brew install ceres-solver) or Conda (conda install -c conda-forge ceres-solver) and ensure it is discoverable.")
-endif
-
-ifeq ($(strip $(GLOG_LIBS)),)
-  $(error "glog library not found. Please install glog via Homebrew (brew install glog) or Conda (conda install -c conda-forge glog) and ensure it is discoverable.")
-endif
-
-ifeq ($(strip $(GFLAGS_LIBS)),)
-  $(error "gflags library not found. Please install gflags via Homebrew (brew install gflags) or Conda (conda install -c conda-forge gflags) and ensure it is discoverable.")
-endif
-
-PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR) \
-  $(SYMENGINE_CFLAGS) $(GLOG_CFLAGS) $(GFLAGS_CFLAGS)
+PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR) $(SYMENGINE_CFLAGS) $(CERES_CFLAGS) -I$(CONDA_PREFIX)/include/glog
 
 CORE_SOURCES := $(shell find $(CORE_DIR) -name '*.cpp')
 CORE_OBJECTS := $(patsubst $(CORE_DIR)/%,%,$(CORE_SOURCES:.cpp=.o))
@@ -93,9 +31,9 @@ wendy.so: $(OBJECTS)
 vpath %.cpp $(sort $(dir $(CORE_SOURCES)))
 
 $(CORE_OBJECTS): %.o: %.cpp
-	$(CXX) -c $< -o $@
+	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
 
-PKG_LIBS = $(SYMENGINE_LIBS) $(FFTW_LIBS) $(CERES_LIBS) $(GLOG_LIBS) $(GFLAGS_LIBS) \
+PKG_LIBS = $(SYMENGINE_LIBS) $(FFTW_LIBS) $(CERES_LIBS) \
   -Wl,-rpath,$(CONDA_PREFIX)/lib \
   $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
   $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
