@@ -79,8 +79,6 @@ endif
 PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR) \
   $(SYMENGINE_CFLAGS) $(GLOG_CFLAGS) $(GFLAGS_CFLAGS)
 
-PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR) $(SYMENGINE_CFLAGS)
-
 CORE_SOURCES := $(shell find $(CORE_DIR) -name '*.cpp')
 CORE_OBJECTS := $(patsubst $(CORE_DIR)/%,%,$(CORE_SOURCES:.cpp=.o))
 
