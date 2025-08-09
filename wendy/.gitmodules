@@ -1,3 +1,0 @@
-[submodule "external/external/xtl"]
-	path = external/external/xtl
-	url = https://github.com/xtensor-stack/xtl.git

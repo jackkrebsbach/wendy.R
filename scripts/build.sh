@@ -25,6 +25,10 @@ cmake -S "$WENDY_DIR" -B "$BUILD_DIR" \
 
 cmake --build "$BUILD_DIR" --target wendy -j"$JOBS"
 
+echo "==> Stage static lib into pkg/src"
+mkdir -p "$PKG_DIR/src"
+cp -f "$BUILD_DIR/libwendy.a" "$PKG_DIR/src/libwendy.a"
+
 echo "==> Vendor headers into pkg/inst/include"
 rm -rf "$INST_INCLUDE_DIR"
 mkdir -p "$INST_INCLUDE_DIR"
@@ -32,14 +36,18 @@ mkdir -p "$INST_INCLUDE_DIR"
 # Copy wendy/include contents
 rsync -a --delete "$WENDY_DIR/include/" "$INST_INCLUDE_DIR/"
 
-# Copy all include dirs from external/*
+# Copy each top-level folder from external/*/include into inst/include/<top>/
+# so nothing clobbers anything else, and --delete only prunes per-subdir.
+shopt -s nullglob
 for dep in "$EXT_DIR"/*; do
-  if [[ -d "$dep/include" ]]; then
-    depname="$(basename "$dep")"
-    mkdir -p "$INST_INCLUDE_DIR/$depname"
-    rsync -a --delete "$dep/include/" "$INST_INCLUDE_DIR/$depname/"
-  fi
+  [[ -d "$dep/include" ]] || continue
+  for top in "$dep/include"/*; do
+    base="$(basename "$top")"
+    rsync -a --delete "$top/" "$INST_INCLUDE_DIR/$base/"
+  done
 done
+shopt -u nullglob
+
 
 echo "==> Rcpp attributes + build tarball"
 cd "$PKG_DIR"

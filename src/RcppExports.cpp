@@ -10,9 +10,18 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// SolveWendyProblem
-Rcpp::List SolveWendyProblem(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0, Rcpp::NumericMatrix tt, double noise_sd, bool compute_svd_, bool optimize_, std::string dist_type);
-RcppExport SEXP _wendy_SolveWendyProblem(SEXP fSEXP, SEXP USEXP, SEXP p0SEXP, SEXP ttSEXP, SEXP noise_sdSEXP, SEXP compute_svd_SEXP, SEXP optimize_SEXP, SEXP dist_typeSEXP) {
+// Test
+void Test();
+RcppExport SEXP _wendy_Test() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Test();
+    return R_NilValue;
+END_RCPP
+}
+// SolveWendyProblem2
+Rcpp::List SolveWendyProblem2(Rcpp::CharacterVector f, Rcpp::NumericMatrix U, Rcpp::NumericVector p0, Rcpp::NumericMatrix tt, double noise_sd, bool compute_svd_, bool optimize_, std::string dist_type);
+RcppExport SEXP _wendy_SolveWendyProblem2(SEXP fSEXP, SEXP USEXP, SEXP p0SEXP, SEXP ttSEXP, SEXP noise_sdSEXP, SEXP compute_svd_SEXP, SEXP optimize_SEXP, SEXP dist_typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -24,13 +33,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type compute_svd_(compute_svd_SEXP);
     Rcpp::traits::input_parameter< bool >::type optimize_(optimize_SEXP);
     Rcpp::traits::input_parameter< std::string >::type dist_type(dist_typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(SolveWendyProblem(f, U, p0, tt, noise_sd, compute_svd_, optimize_, dist_type));
+    rcpp_result_gen = Rcpp::wrap(SolveWendyProblem2(f, U, p0, tt, noise_sd, compute_svd_, optimize_, dist_type));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_wendy_SolveWendyProblem", (DL_FUNC) &_wendy_SolveWendyProblem, 8},
+    {"_wendy_Test", (DL_FUNC) &_wendy_Test, 0},
+    {"_wendy_SolveWendyProblem2", (DL_FUNC) &_wendy_SolveWendyProblem2, 8},
     {NULL, NULL, 0}
 };
 

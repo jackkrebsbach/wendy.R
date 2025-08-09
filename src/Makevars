@@ -1,0 +1,15 @@
+CXX_STD = CXX20
+R_HOME ?= $(shell R RHOME)
+
+PKG_CXXFLAGS = -DNDEBUG -I'../inst/include'
+
+SYMENGINE_LIBS = $(shell pkg-config --libs --silence-errors symengine || echo "-lsymengine -lmpfr -lgmp -lmpc")
+FFTW_LIBS     = $(shell pkg-config --libs --silence-errors fftw3     || echo "-lfftw3")
+CERES_LIBS    = $(shell pkg-config --libs --silence-errors ceres     || echo "-lceres -lglog -lgflags")
+
+RPATHS = -Wl,-rpath,/opt/homebrew/lib -Wl,-rpath,/usr/local/lib
+
+PKG_LIBS = libwendy.a $(SYMENGINE_LIBS) $(FFTW_LIBS) $(CERES_LIBS) \
+  $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
+  $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
+  $(shell "${R_HOME}/bin/R" CMD config FLIBS)

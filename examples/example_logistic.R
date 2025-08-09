@@ -34,6 +34,8 @@ res <- WendySolver(
     p0,
     tt,
     noise_sd = 0.05,
+    compute_svd_ = TRUE,
+    optimize_ = TRUE,
     dist_type = "AddGaussian"
 )
 

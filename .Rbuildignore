@@ -6,7 +6,6 @@
 ^tests$
 ^notebooks$
 ^data$
-^inst$
 ^docs$
 ^.*\.Rproj$
 ^.*\.qmd$
