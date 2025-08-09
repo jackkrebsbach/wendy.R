@@ -1,7 +1,7 @@
 Package: wendy
 Type: Package
 Title: Weak Form Estimation of Nonlinear Dynamics
-Version: 1.0
+Version: 0.0.1
 Date: 2025-06-09
 Authors@R: person("Jack", "Krebsbach", role = c("aut", "cre"), email = "jack.krebsbach@colorado.edu")
 Description: Implements the WENDy algorithm for estimating parameters in systems of ordinary differential equations using weak form methods. 
