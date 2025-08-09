@@ -93,7 +93,7 @@ wendy.so: $(OBJECTS)
 vpath %.cpp $(sort $(dir $(CORE_SOURCES)))
 
 $(CORE_OBJECTS): %.o: %.cpp
-	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
+	$(CXX) -c $< -o $@
 
 PKG_LIBS = $(SYMENGINE_LIBS) $(FFTW_LIBS) $(CERES_LIBS) $(GLOG_LIBS) $(GFLAGS_LIBS) \
   -Wl,-rpath,$(CONDA_PREFIX)/lib \
