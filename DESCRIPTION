@@ -1,12 +1,15 @@
-Package: wendy 
+Package: wendy
 Type: Package
 Title: Weak Form Estimation of Nonlinear Dynamics
 Version: 1.0
 Date: 2025-06-09
 Authors@R: person("Jack", "Krebsbach", role = c("aut", "cre"), email = "jack.krebsbach@colorado.edu")
-Description: More about what it does (maybe more than one line).
+Description: Implements the WENDy algorithm for estimating parameters in systems of ordinary differential equations using weak form methods. 
+    Designed for robust inference in the presence of noise.
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.14), symengine
 LinkingTo: Rcpp, symengine
-SystemRequirements: SymEngine C++ library, xtensor (C++ header-only library)
+SystemRequirements: SymEngine C++ library, FFTW, Ceres Solver
 RoxygenNote: 7.3.2
+Encoding: UTF-8
+NeedsCompilation: yes
