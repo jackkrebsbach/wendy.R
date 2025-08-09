@@ -8,3 +8,5 @@
 .idea
 cmake-build-debug
 *.vscode
+inst
+external

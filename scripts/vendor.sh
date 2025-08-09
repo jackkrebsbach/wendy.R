@@ -3,7 +3,6 @@ set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
 DEST="$ROOT/external"
-INST_INCLUDE="$ROOT/pkg/inst/include"
 GITMODULES="$ROOT/.gitmodules"
 
 # List of deps: "name tag"
@@ -13,7 +12,7 @@ deps=(
   "xtensor-blas 0.22.0"
 )
 
-mkdir -p "$DEST" "$INST_INCLUDE"
+mkdir -p "$DEST" 
 
 # Ensure .gitmodules exists
 [ -f "$GITMODULES" ] || { echo "# Created automatically" > "$GITMODULES"; git add "$GITMODULES"; }
