@@ -18,5 +18,4 @@
 ^examples/
 src/core/.idea
 src/core/test
-src/core/example.sh
 src/core/example

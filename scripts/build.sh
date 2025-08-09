@@ -11,9 +11,6 @@ echo "==> Vendor headers into pkg/inst/include"
 rm -rf "$INST_INCLUDE_DIR"
 mkdir -p "$INST_INCLUDE_DIR"
 
-# Copy wendy/include contents
-rsync -a --delete "$WENDY_DIR/include/" "$INST_INCLUDE_DIR/"
-
 # Copy each top-level folder from external/*/include into inst/include/<top>/
 # so nothing clobbers anything else, and --delete only prunes per-subdir.
 shopt -s nullglob
@@ -31,8 +28,5 @@ cd "$PKG_DIR"
 Rscript -e "Rcpp::compileAttributes('.')"
 
 echo "==> Rcpp attributes + install"
-cd "$PKG_DIR"
-Rscript -e "Rcpp::compileAttributes('.')"
-
 R CMD INSTALL .
 

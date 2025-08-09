@@ -10,7 +10,7 @@
 #' @param dist_type_ Distribution type ("AddGaussian" or "LogNormal").
 #' @return A list with estimation results.
 #' @export
-WendySolver2 <- function(
+WendySolver <- function(
   f,
   U,
   p0,
@@ -39,7 +39,7 @@ WendySolver2 <- function(
 
   du <- vapply(f(u, p, t), as.character, character(1))
 
-  data <- SolveWendyProblem2(
+  data <- SolveWendyProblem(
     du,
     U,
     p0,
