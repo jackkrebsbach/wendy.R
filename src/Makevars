@@ -1,15 +1,11 @@
 CXX_STD = CXX20
 R_HOME ?= $(shell R RHOME)
 
-
-EIGEN_INC = -I/opt/homebrew/include/eigen3
-
 CORE_DIR = ./core/src
-PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR) $(EIGEN_INC)
+PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR)
 
 CORE_SOURCES := $(shell find $(CORE_DIR) -name '*.cpp')
 CORE_OBJECTS := $(patsubst $(CORE_DIR)/%,%,$(CORE_SOURCES:.cpp=.o))
-
 
 $(info CORE_DIR = $(CORE_DIR))
 $(info CORE_SOURCES = $(CORE_SOURCES))

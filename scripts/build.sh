@@ -7,7 +7,7 @@ EXT_DIR="$ROOT_DIR/external"
 PKG_DIR="$ROOT_DIR"
 INST_INCLUDE_DIR="$PKG_DIR/inst/include"
 
-echo "==> Vendor headers into pkg/inst/include"
+echo "==> Vendor headers into inst/include"
 rm -rf "$INST_INCLUDE_DIR"
 mkdir -p "$INST_INCLUDE_DIR"
 
@@ -22,6 +22,16 @@ for dep in "$EXT_DIR"/*; do
   done
 done
 shopt -u nullglob
+
+# Vendor Eigen headers (special case: no include/ directory)
+EIGEN_SRC="$EXT_DIR/eigen"
+if [[ -d "$EIGEN_SRC/Eigen" ]]; then
+  rsync -a --delete "$EIGEN_SRC/Eigen/" "$INST_INCLUDE_DIR/Eigen/"
+fi
+if [[ -d "$EIGEN_SRC/unsupported" ]]; then
+  rsync -a --delete "$EIGEN_SRC/unsupported/" "$INST_INCLUDE_DIR/unsupported/"
+fi
+
 
 echo "==> Rcpp attributes + build tarball"
 cd "$PKG_DIR"

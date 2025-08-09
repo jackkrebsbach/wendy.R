@@ -5,16 +5,16 @@ ROOT="$(git rev-parse --show-toplevel)"
 DEST="$ROOT/external"
 GITMODULES="$ROOT/.gitmodules"
 
-# List of deps: "name tag"
+# Format: name|repo_url|tag|sparse_paths (space-separated)
 deps=(
-  "xtl 0.8.0"
-  "xtensor 0.27.0"
-  "xtensor-blas 0.22.0"
+  "xtl|https://github.com/xtensor-stack/xtl.git|0.8.0|include/ LICENSE"
+  "xtensor|https://github.com/xtensor-stack/xtensor.git|0.27.0|include/ LICENSE"
+  "xtensor-blas|https://github.com/xtensor-stack/xtensor-blas.git|0.22.0|include/ LICENSE"
+  "eigen|https://gitlab.com/libeigen/eigen.git|3.4.0|Eigen/ signature_of_eigen3 LICENSE"
 )
 
-mkdir -p "$DEST" 
+mkdir -p "$DEST"
 
-# Ensure .gitmodules exists
 [ -f "$GITMODULES" ] || { echo "# Created automatically" > "$GITMODULES"; git add "$GITMODULES"; }
 
 remove_submodule() {
@@ -28,20 +28,15 @@ remove_submodule() {
   rm -rf "$path"
 }
 
-# Clean up old submodules
+# Remove all existing submodules for these deps
 for dep in "${deps[@]}"; do
-  set -- $dep
-  name="$1"
+  IFS="|" read -r name _ _ _ <<< "$dep"
   remove_submodule "external/$name"
 done
 rm -rf .git/modules/external || true
 
-# Add + checkout exact versions
 for dep in "${deps[@]}"; do
-  set -- $dep
-  name="$1"
-  tag="$2"
-  repo_url="https://github.com/xtensor-stack/$name.git"
+  IFS="|" read -r name repo_url tag sparse_paths <<< "$dep"
 
   echo "Adding $name @ $tag"
   git submodule add "$repo_url" "external/$name"
@@ -51,21 +46,21 @@ for dep in "${deps[@]}"; do
     git fetch --tags --depth 1 origin tag "$tag"
     git checkout "tags/$tag" --detach
 
-    # Verify
     actual_tag="$(git describe --tags --exact-match 2>/dev/null || true)"
     if [[ "$actual_tag" != "$tag" ]]; then
       echo "ERROR: $name checked out to '$actual_tag', expected '$tag'"
       exit 1
     fi
 
-    # Sparse checkout
     git config core.sparseCheckout true
     mkdir -p "$(git rev-parse --git-dir)/info"
-    echo "include/" > "$(git rev-parse --git-dir)/info/sparse-checkout"
-    echo "LICENSE" >> "$(git rev-parse --git-dir)/info/sparse-checkout"
+    sparse_file="$(git rev-parse --git-dir)/info/sparse-checkout"
+    : > "$sparse_file"
+    for path in $sparse_paths; do
+      echo "$path" >> "$sparse_file"
+    done
     git read-tree -mu HEAD
   )
-
 done
 
-echo "✅ Vendored xtensor stack at locked versions."
+echo "✅ Vendored dependencies at locked versions."
