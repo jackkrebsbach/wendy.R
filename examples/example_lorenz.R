@@ -1,8 +1,12 @@
 # %%
-library(wendy)
-library(symengine)
-library(deSolve)
+
 library(plotly)
+
+library(symengine)
+
+library(deSolve)
+
+library(wendy)
 
 # %%
 lorenz <- function(u, p, t) {

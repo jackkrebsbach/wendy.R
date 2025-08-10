@@ -13,9 +13,8 @@ SYMENGINE_LIBS   = -L$(CONDA_PREFIX)/lib -lsymengine
 FFTW_LIBS        = -L$(CONDA_PREFIX)/lib -lfftw3
 CERES_CFLAGS     = -I$(CONDA_PREFIX)/include
 CERES_LIBS       = -L$(CONDA_PREFIX)/lib -lceres
-GLOG_LIBS        = -L$(CONDA_PREFIX)/lib -lglog
 
-PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR) $(SYMENGINE_CFLAGS) $(CERES_CFLAGS) -I$(CONDA_PREFIX)/include/glog
+PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' -I$(CORE_DIR) $(CERES_CFLAGS) $(SYMENGINE_CFLAGS)  
 
 CORE_SOURCES := $(shell find $(CORE_DIR) -name '*.cpp')
 CORE_OBJECTS := $(patsubst $(CORE_DIR)/%,%,$(CORE_SOURCES:.cpp=.o))
@@ -33,7 +32,7 @@ vpath %.cpp $(sort $(dir $(CORE_SOURCES)))
 $(CORE_OBJECTS): %.o: %.cpp
 	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
 
-PKG_LIBS = $(SYMENGINE_LIBS) $(FFTW_LIBS) $(CERES_LIBS) \
+PKG_LIBS = $(CERES_LIBS) $(SYMENGINE_LIBS) $(FFTW_LIBS) \
   -Wl,-rpath,$(CONDA_PREFIX)/lib \
   $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
   $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \

@@ -10,7 +10,6 @@ deps=(
   "xtl|https://github.com/xtensor-stack/xtl.git|0.8.0|include/ LICENSE"
   "xtensor|https://github.com/xtensor-stack/xtensor.git|0.27.0|include/ LICENSE"
   "xtensor-blas|https://github.com/xtensor-stack/xtensor-blas.git|0.22.0|include/ LICENSE"
-  "eigen|https://gitlab.com/libeigen/eigen.git|3.4.0|Eigen/ signature_of_eigen3 LICENSE"
 )
 
 mkdir -p "$DEST"
