@@ -1,9 +1,8 @@
-\name{WENDyMLE-package}
-\alias{WENDyMLE-package}
-\alias{WENDyMLE}
+\name{wendy}
+\alias{wendy}
 \docType{package}
 \title{
-  A short title line describing what the package does
+  Weak form parameter inference of ODE.
 }
 \description{
   A more detailed description of what the package does. A length

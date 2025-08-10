@@ -23,15 +23,30 @@ for dep in "$EXT_DIR"/*; do
 done
 shopt -u nullglob
 
-# Vendor Eigen headers (special case: no include/ directory)
-EIGEN_SRC="$EXT_DIR/eigen"
-if [[ -d "$EIGEN_SRC/Eigen" ]]; then
-  rsync -a --delete "$EIGEN_SRC/Eigen/" "$INST_INCLUDE_DIR/Eigen/"
-fi
-if [[ -d "$EIGEN_SRC/unsupported" ]]; then
-  rsync -a --delete "$EIGEN_SRC/unsupported/" "$INST_INCLUDE_DIR/unsupported/"
+echo "==> Clean build artifacts"
+# Remove object files and shared libraries in the package root and src/core
+find "$PKG_DIR" -name '*.o' -delete
+find "$PKG_DIR" -name '*.so' -delete
+find "$WENDY_DIR" -name '*.o' -delete
+find "$WENDY_DIR" -name '*.so' -delete
+
+# Remove previous build directories if present
+rm -rf "$PKG_DIR"/build
+rm -rf "$PKG_DIR"/.Rbuildignore
+rm -rf "$PKG_DIR"/.Rhistory
+rm -rf "$PKG_DIR"/.RData
+rm -rf "$PKG_DIR"/.Rproj.user
+
+# Remove any previous installed/locked package in R's site-library
+if [ -d "/opt/homebrew/lib/R/4.5/site-library/00LOCK-wendy" ]; then
+  echo "==> Removing previous 00LOCK-wendy"
+  rm -rf "/opt/homebrew/lib/R/4.5/site-library/00LOCK-wendy"
 fi
 
+if [ -d "/opt/homebrew/lib/R/4.5/site-library/wendy" ]; then
+  echo "==> Removing previous wendy install"
+  rm -rf "/opt/homebrew/lib/R/4.5/site-library/wendy"
+fi
 
 echo "==> Rcpp attributes + build tarball"
 cd "$PKG_DIR"
@@ -39,4 +54,3 @@ Rscript -e "Rcpp::compileAttributes('.')"
 
 echo "==> Rcpp attributes + install"
 R CMD INSTALL .
-

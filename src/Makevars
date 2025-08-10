@@ -1,37 +1,22 @@
 CXX_STD = CXX20
-R_HOME ?= $(shell R RHOME)
-CONDA_PREFIX ?= $(shell echo $$CONDA_PREFIX)
 
-CORE_DIR = ./core/src
+HOMEBREW_PREFIX ?= /opt/homebrew
 
-SYMENGINE_LIBS   = -L$(CONDA_PREFIX)/lib -lsymengine
-FFTW_LIBS        = -L$(CONDA_PREFIX)/lib -lfftw3
-CERES_LIBS       = -L$(CONDA_PREFIX)/lib -lceres
+PKG_CPPFLAGS = -I$(HOMEBREW_PREFIX)/include \
+               -I$(HOMEBREW_PREFIX)/include/eigen3 \
+               -I./core/src \
+               -I../inst/include \
+               -O3 -march=native -mtune=native -fno-math-errno -fno-signed-zeros -fno-trapping-math -freciprocal-math -funroll-loops -flto -fstrict-aliasing -DNDEBUG 
 
-SYMENGINE_CFLAGS = -I$(CONDA_PREFIX)/include
-CERES_CFLAGS     = -I$(CONDA_PREFIX)/include
-EIGEN_CFLAGS     = -I$(CONDA_PREFIX)/include/eigen3
-
-PKG_CPPFLAGS = $(CERES_CFLAGS) $(SYMENGINE_CFLAGS) $(EIGEN_CFLAGS) \
-               -I$(CORE_DIR) \
-               -I'../inst/include' \
-               -O3 -march=native -mtune=native -fno-math-errno -fno-signed-zeros -fno-trapping-math -freciprocal-math \
-               -funroll-loops -flto -fstrict-aliasing -DNDEBUG \
-               -DGLOG_NO_ABBREVIATED_SEVERITIES -DGLOG_USE_GLOG_EXPORT \
-               -fvisibility=hidden -fvisibility-inlines-hidden
-
-CORE_SOURCES := $(shell find $(CORE_DIR) -name '*.cpp')
-CORE_OBJECTS := $(patsubst $(CORE_DIR)/%,%,$(CORE_SOURCES:.cpp=.o))
-
-OBJECTS = RcppExports.o main.o $(CORE_OBJECTS)
+SOURCES = main.cpp RcppExports.cpp $(wildcard core/src/*.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
 
 wendy.so: $(OBJECTS)
-	$(CXX) -std=gnu++20 -shared -o $@ $(OBJECTS) $(PKG_LIBS)
+	$(CXX) $(PKG_CPPFLAGS) -std=gnu++20 -shared -o wendy.so $(OBJECTS) $(PKG_LIBS)
 
-vpath %.cpp $(sort $(dir $(CORE_SOURCES)))
-
-PKG_LIBS = -Wl,-rpath,$(CONDA_PREFIX)/lib \
-           $(CERES_LIBS) $(SYMENGINE_LIBS) $(FFTW_LIBS) \
+PKG_LIBS = -L$(HOMEBREW_PREFIX)/lib \
+           -Wl,-rpath,$(HOMEBREW_PREFIX)/lib \
+           -lsymengine -lfftw3 -lceres \
            $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
            $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
            $(shell "${R_HOME}/bin/R" CMD config FLIBS)
