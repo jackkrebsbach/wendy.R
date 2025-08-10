@@ -1,8 +1,9 @@
 # %%
-library(wendy)
 library(symengine)
 library(deSolve)
 library(plotly)
+library(wendy)
+
 # %%
 set.seed(42)
 goodwin <- function(u, p, t) {

@@ -4,29 +4,24 @@ CONDA_PREFIX ?= $(shell echo $$CONDA_PREFIX)
 
 CORE_DIR = ./core/src
 
-ifeq ($(strip $(CONDA_PREFIX)),)
-  $(error "Please activate your Conda environment with all dependencies installed via conda-forge before building this package.")
-endif
-
-SYMENGINE_CFLAGS = -I$(CONDA_PREFIX)/include
 SYMENGINE_LIBS   = -L$(CONDA_PREFIX)/lib -lsymengine
 FFTW_LIBS        = -L$(CONDA_PREFIX)/lib -lfftw3
-CERES_CFLAGS     = -I$(CONDA_PREFIX)/include
 CERES_LIBS       = -L$(CONDA_PREFIX)/lib -lceres
+
+SYMENGINE_CFLAGS = -I$(CONDA_PREFIX)/include
+CERES_CFLAGS     = -I$(CONDA_PREFIX)/include
 EIGEN_CFLAGS     = -I$(CONDA_PREFIX)/include/eigen3
 
-PKG_CPPFLAGS = -DNDEBUG -I'../inst/include' \
-               -DGLOG_NO_ABBREVIATED_SEVERITIES \
-               -DGLOG_USE_GLOG_EXPORT \
+PKG_CPPFLAGS = $(CERES_CFLAGS) $(SYMENGINE_CFLAGS) $(EIGEN_CFLAGS) \
                -I$(CORE_DIR) \
-               $(CERES_CFLAGS) $(SYMENGINE_CFLAGS) $(EIGEN_CFLAGS) \
-               -isystem $(CONDA_PREFIX)/include
+               -I'../inst/include' \
+               -O3 -march=native -mtune=native -fno-math-errno -fno-signed-zeros -fno-trapping-math -freciprocal-math \
+               -funroll-loops -flto -fstrict-aliasing -DNDEBUG \
+               -DGLOG_NO_ABBREVIATED_SEVERITIES -DGLOG_USE_GLOG_EXPORT \
+               -fvisibility=hidden -fvisibility-inlines-hidden
 
 CORE_SOURCES := $(shell find $(CORE_DIR) -name '*.cpp')
 CORE_OBJECTS := $(patsubst $(CORE_DIR)/%,%,$(CORE_SOURCES:.cpp=.o))
-
-$(info CORE_DIR = $(CORE_DIR))
-$(info CORE_SOURCES = $(CORE_SOURCES))
 
 OBJECTS = RcppExports.o main.o $(CORE_OBJECTS)
 
@@ -35,11 +30,8 @@ wendy.so: $(OBJECTS)
 
 vpath %.cpp $(sort $(dir $(CORE_SOURCES)))
 
-$(CORE_OBJECTS): %.o: %.cpp
-	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
-
-PKG_LIBS = $(CERES_LIBS) $(SYMENGINE_LIBS) $(FFTW_LIBS) \
-           -Wl,-rpath,$(CONDA_PREFIX)/lib \
+PKG_LIBS = -Wl,-rpath,$(CONDA_PREFIX)/lib \
+           $(CERES_LIBS) $(SYMENGINE_LIBS) $(FFTW_LIBS) \
            $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
            $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
            $(shell "${R_HOME}/bin/R" CMD config FLIBS)
