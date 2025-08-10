@@ -8,7 +8,7 @@ Description: Implements the WENDy algorithm for estimating parameters in systems
     Designed for robust inference in the presence of noise.
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.14), symengine
-LinkingTo: Rcpp, symengine
+LinkingTo: Rcpp 
 SystemRequirements: SymEngine C++ library, FFTW, Ceres Solver
 RoxygenNote: 7.3.2
 Encoding: UTF-8

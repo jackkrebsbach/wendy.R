@@ -4,6 +4,7 @@ HOMEBREW_PREFIX ?= /opt/homebrew
 
 PKG_CPPFLAGS = -I$(HOMEBREW_PREFIX)/include \
                -I$(HOMEBREW_PREFIX)/include/eigen3 \
+               -I$(HOMEBREW_PREFIX)/include/coin-or \
                -I./core/src \
                -I../inst/include \
                -O3 -march=native -mtune=native -fno-math-errno -fno-signed-zeros -fno-trapping-math -freciprocal-math -funroll-loops -flto -fstrict-aliasing -DNDEBUG 
@@ -16,7 +17,7 @@ wendy.so: $(OBJECTS)
 
 PKG_LIBS = -L$(HOMEBREW_PREFIX)/lib \
            -Wl,-rpath,$(HOMEBREW_PREFIX)/lib \
-           -lsymengine -lfftw3 -lceres \
+           -lsymengine -lfftw3 -lceres -lipopt \
            $(shell "${R_HOME}/bin/R" CMD config BLAS_LIBS) \
            $(shell "${R_HOME}/bin/R" CMD config LAPACK_LIBS) \
            $(shell "${R_HOME}/bin/R" CMD config FLIBS)

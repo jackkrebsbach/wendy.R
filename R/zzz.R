@@ -1,10 +1,8 @@
 .onLoad <- function(libname, pkgname) {
-  # Path to your package's shared object
   sofile <- system.file("libs", .Platform$r_arch, "wendy.so", package = pkgname)
   if (sofile == "") {
     sofile <- system.file("libs", "wendy.so", package = pkgname)
   }
-  # Try to load the shared object
   tryCatch(
     dyn.load(sofile),
     error = function(e) {

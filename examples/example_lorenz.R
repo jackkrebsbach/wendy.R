@@ -1,13 +1,8 @@
 # %%
-
-library(plotly)
-
-library(symengine)
-
-library(deSolve)
-
 library(wendy)
-
+library(symengine)
+library(deSolve)
+library(plotly)
 # %%
 lorenz <- function(u, p, t) {
     du1 <- p[[1]] * (u[[2]] - u[[1]])

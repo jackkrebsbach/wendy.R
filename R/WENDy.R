@@ -5,6 +5,7 @@
 #' @param p0 Initial parameter guess.
 #' @param tt Time vector.
 #' @param noise_sd Standard deviation of noise.
+#' @param solver Use ceres general optimization or ipopt.
 #' @param compute_svd_ Whether to compute the SVD.
 #' @param optimize_ Whether to optimize the objective.
 #' @param dist_type_ Distribution type ("AddGaussian" or "LogNormal").
@@ -16,6 +17,7 @@ WendySolver <- function(
   p0,
   tt,
   noise_sd = 0.05,
+  solver = "ipopt",
   compute_svd_ = TRUE,
   optimize_ = TRUE,
   dist_type_ = "AddGaussian"
@@ -45,6 +47,7 @@ WendySolver <- function(
     p0,
     tt,
     noise_sd,
+    solver,
     compute_svd_,
     optimize_,
     dist_type = dist_type_
