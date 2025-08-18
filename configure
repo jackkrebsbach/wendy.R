@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WENDY_DIR="$ROOT_DIR/src/core"
 EXT_DIR="$WENDY_DIR/external"
 PKG_DIR="$ROOT_DIR"
@@ -11,8 +11,6 @@ echo "==> Vendor headers into inst/include"
 rm -rf "$INST_INCLUDE_DIR"
 mkdir -p "$INST_INCLUDE_DIR"
 
-# Copy each top-level folder from external/*/include into inst/include/<top>/
-# so nothing clobbers anything else, and --delete only prunes per-subdir.
 shopt -s nullglob
 for dep in "$EXT_DIR"/*; do
   [[ -d "$dep/include" ]] || continue
@@ -23,20 +21,68 @@ for dep in "$EXT_DIR"/*; do
 done
 shopt -u nullglob
 
-
 INCLUDE_FLAGS=""
 LIB_FLAGS=""
+HOMEBREW_PREFIX=""
+CONDA_ACTIVE=0
+HOMEBREW_ACTIVE=0
+
+# Detect available package managers
+HOMEBREW_AVAILABLE=0
+CONDA_AVAILABLE=0
+
+if command -v brew >/dev/null 2>&1; then
+  HOMEBREW_PREFIX="$(brew --prefix)"
+  HOMEBREW_AVAILABLE=1
+fi
 
 if [[ -n "${CONDA_PREFIX:-}" && -d "$CONDA_PREFIX" ]]; then
+  CONDA_AVAILABLE=1
+fi
+
+if [[ "${WENDY_USE_CONDA:-}" == "1" && "${WENDY_USE_HOMEBREW:-}" == "1" ]]; then
+  echo "ERROR: Both WENDY_USE_CONDA and WENDY_USE_HOMEBREW are set. Please set only one."
+  exit 1
+fi
+
+if [[ "${WENDY_USE_HOMEBREW:-}" == "1" ]]; then
+  if [[ "$HOMEBREW_AVAILABLE" -eq 0 ]]; then
+    echo "ERROR: WENDY_USE_HOMEBREW=1 is set, but Homebrew is not installed."
+    exit 1
+  fi
+  HOMEBREW_ACTIVE=1
+  CONDA_ACTIVE=0
+elif [[ "${WENDY_USE_CONDA:-}" == "1" ]]; then
+  if [[ "$CONDA_AVAILABLE" -eq 0 ]]; then
+    echo "ERROR: WENDY_USE_CONDA=1 is set, but no active Conda environment detected."
+    exit 1
+  fi
+  CONDA_ACTIVE=1
+  HOMEBREW_ACTIVE=0
+else
+  # No user override - use priority: Homebrew > Conda
+  if [[ "$HOMEBREW_AVAILABLE" -eq 1 ]]; then
+    HOMEBREW_ACTIVE=1
+  elif [[ "$CONDA_AVAILABLE" -eq 1 ]]; then
+    CONDA_ACTIVE=1
+  fi
+fi
+
+# Set flags for Conda
+if [[ "$CONDA_ACTIVE" -eq 1 ]]; then
   echo "==> Using Conda environment at $CONDA_PREFIX"
-  INCLUDE_FLAGS="-I$CONDA_PREFIX/include -I$CONDA_PREFIX/include/eigen3 -I$CONDA_PREFIX/include/coin-or"
+  INCLUDE_FLAGS="-I$CONDA_PREFIX/include -I$CONDA_PREFIX/include/eigen3 -I$CONDA_PREFIX/include/coin-or -DGLOG_USE_GLOG_EXPORT"
   LIB_FLAGS="-L$CONDA_PREFIX/lib -Wl,-rpath,$CONDA_PREFIX/lib -lsymengine -lfftw3 -lceres -lipopt"
-elif command -v brew >/dev/null 2>&1; then
-  HOMEBREW_PREFIX="$(brew --prefix)"
+fi
+
+# Set flags for Homebrew
+if [[ "$HOMEBREW_ACTIVE" -eq 1 ]]; then
   echo "==> Using Homebrew at $HOMEBREW_PREFIX"
   INCLUDE_FLAGS="-I$HOMEBREW_PREFIX/include -I$HOMEBREW_PREFIX/include/eigen3 -I$HOMEBREW_PREFIX/include/coin-or"
   LIB_FLAGS="-L$HOMEBREW_PREFIX/lib -Wl,-rpath,$HOMEBREW_PREFIX/lib -lsymengine -lfftw3 -lceres -lipopt"
-else
+fi
+
+if [[ "$CONDA_ACTIVE" -eq 0 && "$HOMEBREW_ACTIVE" -eq 0 ]]; then
   echo "ERROR: Could not detect SymEngine, FFTW, Ceres Solver, or Ipopt libraries via Conda or Homebrew."
   echo ""
   echo "To install these dependencies, please use one of the following methods:"

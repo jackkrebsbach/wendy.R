@@ -1,6 +1,3 @@
 useDynLib(wendy, .registration = TRUE)
 importFrom(Rcpp, evalCpp)
 exportPattern("^[[:alpha:]]+")
-# export(S)
-# export(WendySolver)
-# export(SolveWendyProblem)
