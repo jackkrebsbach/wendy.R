@@ -1,9 +1,8 @@
 # %%
+library(wendy)
 library(symengine)
 library(deSolve)
 library(plotly)
-library(wendy)
-
 # %%
 sir_tdi <- function(u, p, t) {
   du1 <- -p[[1]] *
@@ -47,8 +46,8 @@ noise <- matrix(
   rnorm(nrow(sol) * (ncol(sol) - 1), mean = 0, sd = noise_sd),
   nrow = nrow(sol)
 )
-# U <- sol[, -1] * exp(noise)
-U <- sol[, -1] + noise
+U <- sol[, -1] * exp(noise)
+# U <- sol[, -1] + noise
 tt <- matrix(sol[, 1], ncol = 1)
 
 p <- WendySolver(
@@ -57,9 +56,10 @@ p <- WendySolver(
   p0,
   tt,
   noise_sd,
+  solver = "ceres",
   compute_svd_ = TRUE,
   optimize_ = TRUE,
-  # dist_type_ = "LogNormal"
+  dist_type_ = "LogNormal"
 )
 p_hat <- p$p_hat
 

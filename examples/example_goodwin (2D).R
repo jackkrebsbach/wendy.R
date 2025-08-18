@@ -10,7 +10,7 @@ goodwin <- function(u, p, t) {
   list(du1, du2)
 }
 
-npoints <- 101
+npoints <- 280
 p_star <- c(72, 1, 2, 1, 1)
 p0 <- c(68, 2.5, 3, 1.5, 2)
 u0 <- c(7, -10)
@@ -49,8 +49,7 @@ p <- WendySolver(
   p0,
   tt,
   noise_sd,
-  compute_svd_ = TRUE,
-  optimize_ = TRUE
+  solver = "ceres",
 )
 
 p_hat <- p$p_hat
