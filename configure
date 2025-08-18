@@ -37,9 +37,19 @@ elif command -v brew >/dev/null 2>&1; then
   INCLUDE_FLAGS="-I$HOMEBREW_PREFIX/include -I$HOMEBREW_PREFIX/include/eigen3 -I$HOMEBREW_PREFIX/include/coin-or"
   LIB_FLAGS="-L$HOMEBREW_PREFIX/lib -Wl,-rpath,$HOMEBREW_PREFIX/lib -lsymengine -lfftw3 -lceres -lipopt"
 else
-  echo "==> Using only vendored headers (no system libraries detected)"
-  INCLUDE_FLAGS=""
-  LIB_FLAGS="-lsymengine -lfftw3 -lceres -lipopt"
+  echo "ERROR: Could not detect SymEngine, FFTW, Ceres Solver, or Ipopt libraries via Conda or Homebrew."
+  echo ""
+  echo "To install these dependencies, please use one of the following methods:"
+  echo ""
+  echo "  Homebrew (macOS):"
+  echo "    brew install symengine fftw ceres-solver ipopt"
+  echo ""
+  echo "  Conda (cross-platform):"
+  echo "    conda install -c conda-forge symengine fftw ceres-solver ipopt"
+  echo ""
+  echo "After installing, re-run the installation of this R package."
+  echo ""
+  exit 1
 fi
 
 sed \
