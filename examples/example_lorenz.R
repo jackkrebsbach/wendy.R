@@ -13,10 +13,10 @@ lorenz <- function(u, p, t) {
 
 noise_sd <- 0.05
 p_star <- c(10.0, 28.0, 4.0)
-p0 <- c(13.10, 21, 4.0)
+p0 <- c(12.10, 21, 4.0)
 u0 <- c(2, 1, 1)
 
-npoints <- 200
+npoints <- 100
 t_span <- c(0, 10)
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 
@@ -49,9 +49,7 @@ res <- WendySolver(
     p0,
     tt,
     noise_sd,
-    compute_svd_ = TRUE,
-    optimize_ = TRUE,
-    dist_type = "AddGaussian"
+    solver = "ipopt",
 )
 
 p_hat <- res$p_hat

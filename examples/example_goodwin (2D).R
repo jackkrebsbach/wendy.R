@@ -10,7 +10,7 @@ goodwin <- function(u, p, t) {
   list(du1, du2)
 }
 
-npoints <- 280
+npoints <- 145
 p_star <- c(72, 1, 2, 1, 1)
 p0 <- c(68, 2.5, 3, 1.5, 2)
 u0 <- c(7, -10)
