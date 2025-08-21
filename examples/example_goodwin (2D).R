@@ -22,16 +22,7 @@ modelODE <- function(tvec, state, parameters) {
 
 noise_sd <- 0.05
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
-
-sol <- deSolve::ode(
-  y = u0,
-  times = t_eval,
-  func = modelODE,
-  parms = p_star,
-  method = "lsodes",
-  atol = 1e-10,
-  rtol = 1e-10
-)
+sol <- deSolve::ode(y = u0, times = t_eval, func = modelODE, parms = p_star)
 
 noise <- matrix(
   rnorm(nrow(sol) * (ncol(sol) - 1), mean = 0, sd = noise_sd),
@@ -43,14 +34,7 @@ tt <- matrix(sol[, 1], ncol = 1)
 # plot(U[, 2], cex = 0.5, col = "blue")
 # points(U[, 1], cex = 0.5, col = "red", pch = 16)
 
-p <- WendySolver(
-  goodwin,
-  U,
-  p0,
-  tt,
-  noise_sd,
-  solver = "ceres",
-)
+p <- WendySolver(goodwin, U, p0, tt, noise_sd, solver = "ipopt")
 
 p_hat <- p$p_hat
 

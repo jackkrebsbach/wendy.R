@@ -11,7 +11,7 @@ noise_sd <- 0.05
 p_star <- c(1, 1)
 u0 <- c(0.01)
 p0 <- c(0.5, 0.5)
-npoints <- 200
+npoints <- 100
 t_span <- c(0, 10)
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 
@@ -35,8 +35,6 @@ res <- WendySolver(
     tt,
     noise_sd = 0.05,
     solver = "ipopt",
-    compute_svd_ = TRUE,
-    optimize_ = TRUE,
     dist_type = "AddGaussian"
 )
 

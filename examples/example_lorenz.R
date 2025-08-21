@@ -49,7 +49,7 @@ res <- WendySolver(
     p0,
     tt,
     noise_sd,
-    solver = "ipopt",
+    solver = "ceres",
 )
 
 p_hat <- res$p_hat
