@@ -22,7 +22,15 @@ modelODE <- function(tvec, state, parameters) {
 
 noise_sd <- 0.05
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
-sol <- deSolve::ode(y = u0, times = t_eval, func = modelODE, parms = p_star)
+sol <- deSolve::ode(
+  y = u0,
+  times = t_eval,
+  func = modelODE,
+  parms = p_star,
+  method = "lsodes",
+  atol = 1e-10,
+  rtol = 1e-10
+)
 
 noise <- matrix(
   rnorm(nrow(sol) * (ncol(sol) - 1), mean = 0, sd = noise_sd),
