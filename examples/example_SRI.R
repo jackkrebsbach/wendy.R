@@ -25,7 +25,7 @@ p0 <- c(1, 1, 0.1, 0.1, 0.001)
 u0 <- c(1, 0, 0)
 t_span <- c(0, 50)
 noise_sd <- 0.05
-npoints <- 115
+npoints <- 200
 
 modelODE <- function(tvec, state, parameters) {
   list(as.vector(sir_tdi(state, parameters, tvec)))
@@ -46,21 +46,11 @@ noise <- matrix(
   rnorm(nrow(sol) * (ncol(sol) - 1), mean = 0, sd = noise_sd),
   nrow = nrow(sol)
 )
-U <- sol[, -1] * exp(noise)
-# U <- sol[, -1] + noise
+# U <- sol[, -1] * exp(noise)
+U <- sol[, -1] + noise
 tt <- matrix(sol[, 1], ncol = 1)
 
-p <- WendySolver(
-  sir_tdi,
-  U,
-  p0,
-  tt,
-  noise_sd,
-  solver = "ceres",
-  compute_svd_ = TRUE,
-  optimize_ = TRUE,
-  dist_type_ = "LogNormal"
-)
+p <- WendySolver(sir_tdi, U, p0, tt, noise_sd, solver = "ceres")
 p_hat <- p$p_hat
 
 U_hat <- deSolve::ode(

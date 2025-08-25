@@ -1,6 +1,7 @@
 CXX_STD = CXX20
 
-PKG_CPPFLAGS = -I./core/src \
+PKG_CPPFLAGS = -O3 \
+               -I./core/src \
                -I../inst/include \
                @INCLUDE_FLAGS@ \
                -O3 -DNDEBUG -march=native -mtune=native -funroll-loops \
