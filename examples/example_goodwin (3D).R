@@ -35,7 +35,7 @@ noise <- matrix(
 U <- sol[, -1] + noise
 tt <- matrix(sol[, 1], ncol = 1)
 
-p <- WendySolver(goodwin, U, p0, tt, noise_sd)
+p <- WendySolver(goodwin, U, p0, tt)
 
 p_hat <- p$p_hat
 

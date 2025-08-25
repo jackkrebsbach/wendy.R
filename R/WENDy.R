@@ -4,7 +4,6 @@
 #' @param U Observed data matrix.
 #' @param p0 Initial parameter guess.
 #' @param tt Time vector.
-#' @param noise_sd Standard deviation of noise.
 #' @param solver Use ceres general optimization or ipopt.
 #' @param compute_svd_ Whether to compute the SVD.
 #' @param optimize_ Whether to optimize the objective.
@@ -16,7 +15,7 @@ WendySolver <- function(
   U,
   p0,
   tt,
-  solver = "ipopt",
+  solver = "ceres",
   compute_svd_ = TRUE,
   optimize_ = TRUE,
   dist_type_ = "AddGaussian"

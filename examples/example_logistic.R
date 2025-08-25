@@ -28,7 +28,7 @@ U <- matrix(c(sol[, 2] + rnorm(npoints, mean = 0, sd = noise_sd)), ncol = 1)
 
 tt <- matrix(sol[, 1], ncol = 1)
 
-res <- WendySolver(logistic, U, p0, tt, noise_sd = 0.05, solver = "ceres")
+res <- WendySolver(logistic, U, p0, tt)
 
 p_hat <- res$p_hat
 

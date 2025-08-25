@@ -9,7 +9,6 @@ goodwin <- function(u, p, t) {
   du2 <- p[[4]] * u[[1]] - p[[5]]
   list(du1, du2)
 }
-
 npoints <- 256
 p_star <- c(72, 1, 2, 1, 1)
 p0 <- c(68, 2.5, 3, 1.5, 2)
@@ -34,7 +33,7 @@ tt <- matrix(sol[, 1], ncol = 1)
 # plot(U[, 2], cex = 0.5, col = "blue")
 # points(U[, 1], cex = 0.5, col = "red", pch = 16)
 
-p <- WendySolver(goodwin, U, p0, tt, noise_sd, solver = "ceres")
+p <- WendySolver(goodwin, U, p0, tt)
 
 p_hat <- p$p_hat
 

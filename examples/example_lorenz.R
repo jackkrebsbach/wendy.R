@@ -16,7 +16,7 @@ p_star <- c(10.0, 28.0, 4.0)
 p0 <- c(12.10, 21, 4.0)
 u0 <- c(2, 1, 1)
 
-npoints <- 100
+npoints <- 256
 t_span <- c(0, 10)
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 
@@ -43,14 +43,7 @@ U <- sol[, -1] + noise
 
 tt <- matrix(sol[, 1], ncol = 1)
 
-res <- WendySolver(
-    lorenz,
-    U,
-    p0,
-    tt,
-    noise_sd,
-    solver = "ceres",
-)
+res <- WendySolver(lorenz, U, p0, tt, solver = "ceres")
 
 p_hat <- res$p_hat
 
