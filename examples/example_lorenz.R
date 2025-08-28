@@ -43,7 +43,7 @@ U <- sol[, -1] + noise
 
 tt <- matrix(sol[, 1], ncol = 1)
 
-res <- WendySolver(lorenz, U, p0, tt, solver = "ceres")
+res <- WendySolver(lorenz, U, p0, tt, log_level = 'info')
 
 p_hat <- res$p_hat
 

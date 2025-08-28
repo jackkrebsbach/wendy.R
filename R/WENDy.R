@@ -15,6 +15,7 @@ WendySolver <- function(
   U,
   p0,
   tt,
+  log_level = "none",
   solver = "ceres",
   compute_svd_ = TRUE,
   optimize_ = TRUE,
@@ -44,9 +45,10 @@ WendySolver <- function(
     U,
     p0,
     tt,
-    solver,
-    compute_svd_,
-    optimize_,
+    log_level,
+    solver = solver,
+    compute_svd_ = compute_svd_,
+    optimize_ = optimize_,
     dist_type = dist_type_
   )
 

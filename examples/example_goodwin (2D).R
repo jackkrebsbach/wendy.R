@@ -9,9 +9,9 @@ goodwin <- function(u, p, t) {
   du2 <- p[[4]] * u[[1]] - p[[5]]
   list(du1, du2)
 }
-npoints <- 256
+npoints <- 150
 p_star <- c(72, 1, 2, 1, 1)
-p0 <- c(68, 2.5, 3, 1.5, 2)
+p0 <- c(78, 1.56, 2.5, 1.75, 0.6)
 u0 <- c(7, -10)
 t_span <- c(0, 60)
 
@@ -41,7 +41,7 @@ sol_hat <- deSolve::ode(
   y = u0,
   times = t_eval,
   func = modelODE,
-  parms = p_hat,
+  parms = p_hat
 )[, -1]
 
 plot(U[, c(1, 2)], cex = 0.5)
