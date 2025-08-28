@@ -11,7 +11,7 @@ goodwin <- function(u, p, t) {
 }
 npoints <- 150
 p_star <- c(72, 1, 2, 1, 1)
-p0 <- c(78, 1.56, 2.5, 1.75, 0.6)
+p0 <- c(70, 1.56, 2.5, 1.75, 0.6)
 u0 <- c(7, -10)
 t_span <- c(0, 60)
 
@@ -29,9 +29,6 @@ noise <- matrix(
 )
 U <- sol[, -1] + noise
 tt <- matrix(sol[, 1], ncol = 1)
-
-# plot(U[, 2], cex = 0.5, col = "blue")
-# points(U[, 1], cex = 0.5, col = "red", pch = 16)
 
 p <- WendySolver(goodwin, U, p0, tt)
 
