@@ -4,14 +4,7 @@ PKG_CPPFLAGS = -O3 \
                -I./core/src \
                -I../inst/include \
                @INCLUDE_FLAGS@ \
-               -O3 -DNDEBUG -march=native -mtune=native -funroll-loops \
-               -fno-math-errno \
-               -funsafe-math-optimizations \
-               -fno-trapping-math \
-               -fno-signed-zeros \
-               -fcx-limited-range \
-               -fexcess-precision=fast \
-               -flto -fstrict-aliasing
+               -O3 -DNDEBUG -ffast-math -funroll-loops 
 
 SOURCES = main.cpp RcppExports.cpp $(wildcard core/src/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
