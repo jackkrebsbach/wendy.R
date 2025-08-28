@@ -17,13 +17,13 @@ You can install these dependencies using either Conda or Homebrew, depending on 
 ### Install with Homebrew (macOS)
 
 ``` bash
-brew install symengine fftw ceres-solver ipopt
+brew install symengine fftw ceres-solver 
 ```
 
 ### Install with Conda 
 
 ``` bash
-conda install -c conda-forge symengine fftw ceres-solver ipopt
+conda install -c conda-forge symengine fftw ceres-solver
 ```
 
 
