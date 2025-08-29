@@ -1,8 +1,9 @@
-#' Estimate parameters using WENDy
+#' Estimate parameters of a system of ODE using WENDy
 #' @param f A symbolic function.
 #' @param U Observed data matrix.
 #' @param p0 Initial parameter guess.
 #' @param tt Time vector.
+#' @param log_level Character; one of "none" or "info".
 #' @param compute_svd_ Whether to compute the SVD.
 #' @param optimize_ Whether to optimize the objective.
 #' @param dist_type_ Distribution type ("AddGaussian" or "LogNormal").
@@ -27,8 +28,16 @@ WendySolver <- function(
   }
   DistType <- c("AddGaussian", "LogNormal")
 
+  log_level <- match.arg(log_level, c("none", "info"))
+
   validate_dist_type <- function(x) {
     match.arg(x, DistType)
+  }
+
+  if (!validate_dist_type(dist_type_)) {
+    warning(
+      "Unkown noise distribution: choices are multiplicative normal or additive gaussian"
+    )
   }
 
   u <- lapply(1:ncol(U), function(i) symengine::S(paste0("u", i)))
