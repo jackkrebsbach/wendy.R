@@ -42,7 +42,16 @@ Sys.setenv(WENDY_USE_CONDA = "1")
 Sys.setenv(CONDA_PREFIX = "{YOUR CONDA PREFIX}")
 ```
 
-Install R dependencies
+Install system dependencies for R symengine.
+
+``` bash
+zypper install cmake gmp-devel mpfr-devel mpc-devel    ## openSUSE
+dnf    install cmake gmp-devel mpfr-devel libmpc-devel ## Fedora
+apt    install cmake libgmp-dev libmpfr-dev libmpc-dev ## Debian
+brew   install cmake gmp mpfr libmpc                   ## Mac OS
+```
+
+Install R dependencies (deSolve optional for data generation)
 
 ```r
 install.packages(c("symengine", "deSolve"))
