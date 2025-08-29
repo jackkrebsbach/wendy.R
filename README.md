@@ -17,17 +17,36 @@ You can install these dependencies using either Conda or Homebrew, depending on 
 ### Install with Homebrew (macOS)
 
 ``` bash
-brew install symengine fftw ceres-solver 
+brew install symengine fftw ceres-solver ipopt
 ```
 
 ### Install with Conda
 
 ``` bash
-conda install -c conda-forge symengine fftw ceres-solver
+conda install -c conda-forge symengine fftw ceres-solver ipopt
 ```
 
 **Note:**\
-Make sure to activate your Conda environment before installing or using this package if you choose the Conda method.
+Make sure to activate your Conda environment before installing or using this package if you choose the Conda method. Run 
+
+``` bash
+conda env list
+```
+
+to find the conda prefix where the system dependencies live. 
+
+In R, before installation, run
+
+``` r
+Sys.setenv(WENDY_USE_CONDA = "1")
+Sys.setenv(CONDA_PREFIX = "{YOUR CONDA PREFIX}")
+```
+
+Install R dependencies
+
+```r
+install.packages(c("symengine", "deSolve"))
+```
 
 ## Installation
 
