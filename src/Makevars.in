@@ -4,7 +4,7 @@ PKG_CPPFLAGS = -I./core/src \
                -I../inst/include \
                @INCLUDE_FLAGS@ 
 
-PKG_CXXFLAGS = -DNDEBUG -funroll-loops -funsafe-math-optimizations 
+PKG_CXXFLAGS = -DNDEBUG -funroll-loops 
 
 SOURCES = main.cpp RcppExports.cpp $(wildcard core/src/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)

@@ -10,3 +10,4 @@ cmake-build-debug
 *.vscode
 inst
 src/Makevars
+.Rproj.user

@@ -7,11 +7,11 @@ logistic <- function(u, p, t) {
     list(p[[1]] * u[[1]] - p[[2]] * u[[1]]^2)
 }
 
-noise_sd <- 0.05
+noise_sd <- 0.15
 p_star <- c(1, 1)
 u0 <- c(0.01)
 p0 <- c(0.5, 0.5)
-npoints <- 256
+npoints <- 512
 t_span <- c(0, 10)
 t_eval <- seq(t_span[1], t_span[2], length.out = npoints)
 
