@@ -20,25 +20,30 @@ You can install these dependencies using either Conda or Homebrew, depending on 
 brew install symengine fftw ceres-solver 
 ```
 
-### Install with Conda 
+### Install with Conda
 
 ``` bash
 conda install -c conda-forge symengine fftw ceres-solver
 ```
 
-
 **Note:**\
 Make sure to activate your Conda environment before installing or using this package if you choose the Conda method.
 
-
 ## Installation
 
-```r
+``` r
 devtools::install_github("jackkrebsbach/wendy.R")
 ```
 
-or 
+or
 
-```r
+``` r
 remotes::install_github("jackkrebsbach/wendy.R")
 ```
+
+## Examples
+
+-   [Logistic](examples/example_logistic.R)
+-   [Lorenz](examples/example_lorenz.R)
+-   [Goodwin(2D)](examples/example_goodwin%20(2D).R)
+-   [Goodwin(3D)](examples/example_goodwin%20(3D).R)
