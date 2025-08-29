@@ -9,7 +9,7 @@ goodwin <- function(u, p, t) {
   du2 <- p[[4]] * u[[1]] - p[[5]]
   list(du1, du2)
 }
-npoints <- 150
+npoints <- 300
 p_star <- c(72, 1, 2, 1, 1)
 p0 <- c(70, 1.56, 2.5, 1.75, 0.6)
 u0 <- c(7, -10)

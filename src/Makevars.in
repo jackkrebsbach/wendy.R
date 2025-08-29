@@ -1,10 +1,10 @@
 CXX_STD = CXX20
 
-PKG_CPPFLAGS = -O3 \
-               -I./core/src \
+PKG_CPPFLAGS = -I./core/src \
                -I../inst/include \
-               @INCLUDE_FLAGS@ \
-               -O3 -DNDEBUG -ffast-math -funroll-loops 
+               @INCLUDE_FLAGS@ 
+
+PKG_CXXFLAGS = -DNDEBUG -funroll-loops -funsafe-math-optimizations 
 
 SOURCES = main.cpp RcppExports.cpp $(wildcard core/src/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)

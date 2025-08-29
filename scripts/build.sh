@@ -37,4 +37,4 @@ cd "$PKG_DIR"
 Rscript -e "Rcpp::compileAttributes('.')"
 
 echo "==> Rcpp attributes + install"
-R CMD INSTALL . --clean
+R CMD INSTALL . --clean 
