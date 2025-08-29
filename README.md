@@ -29,3 +29,16 @@ conda install -c conda-forge symengine fftw ceres-solver
 
 **Note:**\
 Make sure to activate your Conda environment before installing or using this package if you choose the Conda method.
+
+
+## Installation
+
+```r
+devtools::install_github("jackkrebsbach/wendy.R")
+```
+
+or 
+
+```r
+remotes::install_github("jackkrebsbach/wendy.R")
+```
