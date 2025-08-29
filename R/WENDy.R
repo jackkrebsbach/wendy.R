@@ -34,12 +34,6 @@ WendySolver <- function(
     match.arg(x, DistType)
   }
 
-  if (!validate_dist_type(dist_type_)) {
-    warning(
-      "Unkown noise distribution: choices are multiplicative normal or additive gaussian"
-    )
-  }
-
   u <- lapply(1:ncol(U), function(i) symengine::S(paste0("u", i)))
   p <- lapply(1:length(p0), function(i) symengine::S(paste0("p", i)))
   t <- symengine::S("t")
