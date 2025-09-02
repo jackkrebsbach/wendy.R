@@ -54,7 +54,7 @@ brew   install cmake gmp mpfr libmpc                   ## Mac OS
 Install R dependencies (deSolve optional for data generation)
 
 ```r
-install.packages(c("symengine", "deSolve"))
+install.packages(c("symengine", "deSolve", "Rcpp"))
 ```
 
 ## Installation
